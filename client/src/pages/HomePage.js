@@ -108,6 +108,7 @@ const HomePage = () => {
   };
   return (
     <Layout title={"ALl Products - Best offers "}>
+      <h1>All Products</h1>
       {/* banner image */}
       {/* banner image */}
       <div className="container-fluid row mt-3 home-page">
