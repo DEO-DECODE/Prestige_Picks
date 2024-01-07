@@ -19,33 +19,39 @@ dotenv.config({ path: "config.env" });
 
 export const requireSignIn = async (req, res, next) => {
   try {
-    
-    let token= req.headers.authorization;
+    let token = req.headers.authorization;
     const bearerHeader = req.headers["authorization"];
-    console.log(bearerHeader);
-    const bearer = bearerHeader.split(" ");
-    if (bearer.length === 2) {
-      // Get the token from the split array
-      token = bearer[1];
+
+    if (typeof bearerHeader !== "undefined") {
+      // Split the header value by space
+      const bearer = bearerHeader.split(" ");
+
+      if (bearer.length === 2) {
+        // Get the token from the split array
+        token = bearer[1];
+      }
     }
-    console.log('Received Token:', token);
+    console.log("Received Token:", token);
     if (!token) {
-      return res.status(401).json({ error: 'Unauthorized - Token not provided' });
+      return res
+        .status(401)
+        .json({ error: "Unauthorized - Token not provided" });
     }
 
     const decode = JWT.verify(token, process.env.JWT_SECRET);
+    console.log("Decoded data:", decode);
     req.user = decode;
     next();
   } catch (error) {
     console.error(error);
 
     // Check for specific JWT errors and handle them accordingly
-    if (error.name === 'JsonWebTokenError') {
-      return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+    if (error.name === "JsonWebTokenError") {
+      return res.status(401).json({ error: "Unauthorized - Invalid token" });
     }
 
     // Handle other errors (e.g., token expired)
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 

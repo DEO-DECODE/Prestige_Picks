@@ -7,8 +7,8 @@
   justify-content: center;
   min-height: 70vh;
   flex-direction: column;
-  background-color: #ffdee9;
-  background-image: linear-gradient(0deg, #ffdee9 0%, #b5fffc 100%);
+  background-color: rgb(235, 235, 235);
+  background-image: linear-gradient(0deg, rgb(235, 235, 235) 0%, #e7ef78 100%);
 }
 
 .form-container form {

@@ -33,13 +33,17 @@ const CreateProduct = () => {
   //   }
   // };
   const getAllCategory = async () => {
+    const headers = new Headers();
+    console.log("Toke in getAllCat : ", auth?.token);
+    headers.append("Authorization", auth?.token);
     try {
       // console.log(auth.token);
       const response = await fetch("/api/v1/category/get-category", {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${auth.token}`,
+        // },
+        headers,
       });
       const data = await response.json();
 
@@ -85,6 +89,7 @@ const CreateProduct = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
+      console.log("Toke in handleCreate : ", auth?.token);
       const productData = new FormData();
       productData.append("name", name);
       productData.append("description", description);
@@ -92,17 +97,19 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
-  
+      const headers = new Headers();
+      headers.append("Authorization", auth?.token);
       const response = await fetch("/api/v1/product/create-product", {
         method: "POST",
         body: productData,
-        headers: {
-          Authorization: `Bearer ${auth.token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${auth.token}`,
+        // },
+        headers,
       });
-  
+
       const data = await response.json();
-  
+
       if (data?.success) {
         toast.success(data?.message);
         navigate("/dashboard/admin/products");
@@ -114,7 +121,6 @@ const CreateProduct = () => {
       toast.error("Something went wrong");
     }
   };
-  
 
   return (
     <Layout title={"Dashboard - Create Product"}>

@@ -9,7 +9,10 @@ const AuthProvider = ({ children }) => {
   });
 
   //default axios
-  axios.defaults.headers.common["Authorization"] = auth?.token;
+  // axios.defaults.headers.common["Authorization"] = auth?.token;
+  // Set authorization header for fetch requests
+  const headers = new Headers();
+  headers.append("Authorization", auth?.token);
 
   useEffect(() => {
     const data = localStorage.getItem("auth");

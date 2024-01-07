@@ -16,6 +16,9 @@ export const createCategoryController = async (req, res) => {
     const category = await new categoryModel({
       name,
       slug: slugify(name),
+      /*
+      The slugify function typically transforms a string, such as a name, into a format that is suitable for use in a URL. It replaces spaces with hyphens, removes special characters, and converts the entire string to lowercase.
+      */
     }).save();
     res.status(201).send({
       success: true,
