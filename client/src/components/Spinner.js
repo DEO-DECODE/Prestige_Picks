@@ -12,8 +12,14 @@ const Spinner = ({ path = "login" }) => {
     count === 0 &&
       navigate(`/${path}`, {
         state: location.pathname,
+        /*
+        location: The useLocation hook provides information about the current location (URL). In this component, the location.pathname is used as the state when calling navigate. This allows you to store the current pathname before redirection.
+        */
       });
     return () => clearInterval(interval);
+    /*
+    The clearInterval function is used to clean up the interval when the component is unmounted.
+    */
   }, [count, navigate, location, path]);
   return (
     <>

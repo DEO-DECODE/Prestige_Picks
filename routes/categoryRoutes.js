@@ -29,7 +29,7 @@ router.put(
 
 //getALl category
 router.get("/get-category", categoryControlller);
-
+// Iske liye koii middleware nhi hai bcz.. need not to log in .
 //single category
 router.get("/single-category/:slug", singleCategoryController);
 

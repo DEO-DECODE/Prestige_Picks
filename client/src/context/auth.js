@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext, createContext } from "react";
-import axios from "axios";
+// import axios from "axios";
 
 const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
@@ -8,14 +8,13 @@ const AuthProvider = ({ children }) => {
     token: "",
   });
 
-  //default axios
-  // axios.defaults.headers.common["Authorization"] = auth?.token;
   // Set authorization header for fetch requests
   const headers = new Headers();
   headers.append("Authorization", auth?.token);
 
   useEffect(() => {
-    const data = localStorage.getItem("auth");
+    const data 
+    = localStorage.getItem("auth");
     if (data) {
       const parseData = JSON.parse(data);
       setAuth({

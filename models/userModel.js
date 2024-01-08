@@ -34,6 +34,10 @@ const userSchema = new mongoose.Schema(
     },
   },
   { timestamps: true }
+  /*
+ 
+In MongoDB, the timestamps: true option is used when defining a schema to automatically add createdAt and updatedAt fields to documents in a collection. These fields are then managed by MongoDB itself.
+*/
 );
 
 export default mongoose.model("users", userSchema);
