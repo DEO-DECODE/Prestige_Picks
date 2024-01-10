@@ -14,10 +14,22 @@ const CreateCategory = () => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState(null);
   const [updatedName, setUpdatedName] = useState("");
+  const slugify = (text) => {
+    return text
+    .toString()
+    .toLowerCase()
+    .replace(/[^a-zA-Z\s]/g, '') // Remove non-alphabetic characters
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/--+/g, '-') // Replace multiple hyphens with a single hyphen
+    .replace(/^-+/, '') // Trim leading hyphens
+    .replace(/-+$/, ''); // Trim trailing hyphens
+
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     // This is done to prevent the default behavior of reloading.
+    let slugName = slugify(name);
     try {
       const response = await fetch("/api/v1/category/create-category", {
         method: "POST",
@@ -28,13 +40,13 @@ const CreateCategory = () => {
         /*
         When you set "Content-Type" to "application/json", you are telling the server that the data being sent in the request body is in JSON format. This is crucial for the server to correctly interpret and process the incoming data.
         */
-        body: JSON.stringify({ name }),
+        body: JSON.stringify({ name: slugName }),
       });
 
       const data = await response.json();
 
       if (data?.success) {
-        toast.success(`${name} is created`);
+        toast.success(`${slugName} is created`);
         getAllCategory();
       } else {
         toast.error(data.message);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import Layout from "./../../components/Layout/Layout";
 import AdminMenu from "./../../components/Layout/AdminMenu";
 import toast from "react-hot-toast";
-import axios from "axios";
 import { useAuth } from "../../context/auth";
 import { Select } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -20,18 +19,6 @@ const CreateProduct = () => {
   const [shipping, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
 
-  //get all category
-  // const getAllCategory = async () => {
-  //   try {
-  //     const { data } = await axios.get("/api/v1/category/get-category");
-  //     if (data?.success) {
-  //       setCategories(data?.category);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Something wwent wrong in getting catgeory");
-  //   }
-  // };
   const getAllCategory = async () => {
     const headers = new Headers();
     console.log("Toke in getAllCat : ", auth?.token);
@@ -59,33 +46,6 @@ const CreateProduct = () => {
   useEffect(() => {
     getAllCategory();
   }, []);
-
-  // //create product function
-  // const handleCreate = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const productData = new FormData();
-  //     productData.append("name", name);
-  //     productData.append("description", description);
-  //     productData.append("price", price);
-  //     productData.append("quantity", quantity);
-  //     productData.append("photo", photo);
-  //     productData.append("category", category);
-  //     const { data } = axios.post(
-  //       "/api/v1/product/create-product",
-  //       productData
-  //     );
-  //     if (data?.success) {
-  //       toast.error(data?.message);
-  //     } else {
-  //       toast.success("Product Created Successfully");
-  //       navigate("/dashboard/admin/products");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("something went wrong");
-  //   }
-  // };
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
