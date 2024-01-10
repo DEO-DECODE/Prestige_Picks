@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import crypto from "crypto";
 const userSchema = new mongoose.Schema(
   {
     name: {
@@ -32,6 +32,8 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    resetPasswordToken: String,
+    resetPasswordExpire: Date,
   },
   { timestamps: true }
   /*
@@ -39,5 +41,21 @@ const userSchema = new mongoose.Schema(
 In MongoDB, the timestamps: true option is used when defining a schema to automatically add createdAt and updatedAt fields to documents in a collection. These fields are then managed by MongoDB itself.
 */
 );
+
+// Generating Password Reset Token
+userSchema.methods.getResetPasswordToken = function () {
+  // Generating Token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  // Hashing and adding resetPasswordToken to userSchema
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+
+  return resetToken;
+};
 
 export default mongoose.model("users", userSchema);

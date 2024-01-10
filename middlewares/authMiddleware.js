@@ -5,7 +5,7 @@ dotenv.config({ path: "config.env" });
 
 export const requireSignIn = async (req, res, next) => {
   try {
-    console.log(req.headers);
+    // console.log(req.headers);
     let token = req.headers.authorization;
     const bearerHeader = req.headers["authorization"];
 

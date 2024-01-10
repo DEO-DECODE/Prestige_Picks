@@ -3,7 +3,8 @@ import orderModel from "../models/orderModel.js";
 
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
-
+import { sendEmail } from "../utils/sendEmail.js";
+import crypto from "crypto";
 export const registerController = async (req, res) => {
   try {
     const { name, email, password, phone, address, answer } = req.body;
@@ -131,44 +132,6 @@ export const loginController = async (req, res) => {
   }
 };
 
-//forgotPasswordController
-
-export const forgotPasswordController = async (req, res) => {
-  try {
-    const { email, answer, newPassword } = req.body;
-    if (!email) {
-      res.status(400).send({ message: "Emai is required" });
-    }
-    if (!answer) {
-      res.status(400).send({ message: "answer is required" });
-    }
-    if (!newPassword) {
-      res.status(400).send({ message: "New Password is required" });
-    }
-    //check
-    const user = await userModel.findOne({ email, answer });
-    //validation
-    if (!user) {
-      return res.status(404).send({
-        success: false,
-        message: "Wrong Email Or Answer",
-      });
-    }
-    const hashed = await hashPassword(newPassword);
-    await userModel.findByIdAndUpdate(user._id, { password: hashed });
-    res.status(200).send({
-      success: true,
-      message: "Password Reset Successfully",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Something went wrong",
-      error,
-    });
-  }
-};
 
 //test controller
 export const testController = (req, res) => {
@@ -269,5 +232,128 @@ export const orderStatusController = async (req, res) => {
       message: "Error While Updateing Order",
       error,
     });
+  }
+};
+
+/*
+Updating The Password Using Nodemailer
+*/
+
+// Forgot Password
+export const forgotPassword = async (req, res, next) => {
+  
+  const user = await userModel.findOne({ email: req.body.email });
+
+  if (!user) {
+    // return next(new ErrorHander("User not found", 404));
+    return res.status(404).send({
+      success: false,
+      message: "User Not Found",
+    });
+  }
+
+  const resetToken = user.getResetPasswordToken();
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetPasswordUrl = `${req.protocol}:localhost:3000/reset-password/${resetToken}`;
+  // req.host is going to return the Localhost
+  const message = `Your password reset token is: ${resetPasswordUrl}\n\nIf you have not requested this email, please ignore it.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: `Prestige Picks Password Recovery`,
+      message,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
+
+    // return next(new ErrorHander(error.message, 500));
+    return res.status(500).send({
+      success: false,
+      message: error.message,
+      message2: "Unable to Send Email",
+    });
+  }
+};
+
+// Reset Password
+export const resetPassword = async (req, res, next) => {
+  try {
+    const resetToken = req.params.token;
+    console.log("Received reset token:", resetToken);
+
+    const resetPasswordToken = crypto
+      .createHash("sha256")
+      .update(resetToken)
+      .digest("hex");
+    //  genearting a resetPasswordToken because, it was saved in hashed form.
+    console.log("Generated resetPasswordToken:", resetPasswordToken);
+
+    const user = await userModel.findOne({
+      resetPasswordToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    console.log("User found:", user);
+
+    if (!user) {
+      console.log("User not found");
+      // return next(
+      //   new ErrorHander(
+      //     "Reset Password Token is invalid or has been expired",
+      //     400
+      //   )
+      // );
+      return res.status(400).send({
+        success: false,
+        message: "Reset Password Token is invalid or has been expired",
+      });
+    }
+
+    if (req.body.password !== req.body.confirmPassword) {
+      console.log("Password does not match");
+      // return next(new ErrorHander("Password does not Match", 400));
+      return res.status(400).send({
+        success: false,
+        message: "Password does not Match",
+      });
+    }
+    const hashedPassword = await hashPassword(req.body.password);
+    user.password = hashedPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+    // Reset Password krte time hame, hashing v krni hai ..
+    console.log("Password reset successful");
+    const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+    res.status(200).send({
+      success: true,
+      message: "Password Reset successfully",
+      user: {
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        address: user.address,
+        role: user.role,
+      },
+      token,
+      // Av jo hm token bhej rhe hai, baad m use save v karana hoga.
+    });
+  } catch (error) {
+    console.error("Error in resetPassword:", error);
   }
 };

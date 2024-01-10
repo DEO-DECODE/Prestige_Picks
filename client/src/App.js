@@ -24,6 +24,7 @@ import Categories from "./pages/Categories";
 import CategoryProduct from "./pages/CategoryProduct";
 import CartPage from "./pages/CartPage";
 import AdminOrders from "./pages/Admin/AdminOrders";
+import ResetPasssword from "./pages/Auth/ResetPassword";
 function App() {
   return (
     <>
@@ -50,6 +51,7 @@ function App() {
         </Route>
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPasssword />} />
+        <Route path="/reset-password/:token" element={<ResetPasssword />} />
         <Route path="/login" element={<Login />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
