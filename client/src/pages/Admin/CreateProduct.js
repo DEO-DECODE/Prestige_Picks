@@ -53,6 +53,9 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
+      /*
+      The FormData object is a built-in JavaScript object that provides a way to easily construct a set of key/value pairs representing form fields and their values. It is commonly used when making HTTP requests, especially when you need to send data as part of a multipart/form-data request, which is typically used for file uploads.
+      */
 
       const response = await fetch("/api/v1/product/create-product", {
         method: "POST",
@@ -60,7 +63,6 @@ const CreateProduct = () => {
         headers: {
           Authorization: `Bearer ${auth.token}`,
         },
-
       });
 
       const data = await response.json();
@@ -108,18 +110,33 @@ const CreateProduct = () => {
                   {photo ? photo.name : "Upload Photo"}
                   <input
                     type="file"
+                    /*
+                    type="file": Specifies that this is a file input. It allows the user to choose one or more files from their device.
+                    */
                     name="photo"
+                    /*
+                    name="photo": Provides a name for the input. This name will be used when submitting the form, and it can be used to identify the input on the server-side when processing the form data.
+                    */
                     accept="image/*"
+                    /*
+                     Sets a restriction on the types of files that can be selected. In this case, it allows only image files
+                     */
                     onChange={(e) => setPhoto(e.target.files[0])}
+                    /*
+                    e.target.files[0] is the first file selected by the user.
+                    */
                     hidden
                   />
                 </label>
               </div>
+              {console.log(photo)}
               <div className="mb-3">
                 {photo && (
                   <div className="text-center">
                     <img
                       src={URL.createObjectURL(photo)}
+                      /*URL.createObjectURL(photo): This method takes a Blob or File object (in this case, the photo file) and creates a unique URL that represents the content of that file. 
+                      */
                       alt="product_photo"
                       height={"200px"}
                       className="img img-responsive"

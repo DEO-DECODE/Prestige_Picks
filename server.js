@@ -20,6 +20,12 @@ const app = express();
 //middelwares
 app.use(cors());
 app.use(fileUpload({ useTempFiles: true }));
+/*
+fileUpload is a middleware provided by the express-fileupload library, which is commonly used for handling file uploads in Express.js.
+*/
+/*
+When useTempFiles is set to true, the uploaded files are saved to a temporary directory on the server, and the req.files object (which contains information about the uploaded files) will include references to these temporary files.
+*/
 app.use(express.json());
 app.use(morgan("dev"));
 

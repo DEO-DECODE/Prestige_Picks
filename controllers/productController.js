@@ -6,6 +6,9 @@ import fs from "fs";
 import slugify from "slugify";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
+/*
+The v2 module provides the main functionality for interacting with the Cloudinary service.
+*/
 //configure env
 dotenv.config({ path: "config.env" });
 cloudinary.config({
@@ -26,9 +29,13 @@ export const createProductController = async (req, res) => {
   try {
     // console.log(req.body);
     const file = req.files.photo;
-
-    // Storing Photo in file using promises instead of callback
+    /*
+     it retrieves the uploaded file from the req.files object. The photo property corresponds to the field name used in the HTML form for the file upload.
+     */
     const result = await cloudinary.uploader.upload(file.tempFilePath);
+    /*
+    file.tempFilePath is the path to the temporary file on the server's filesystem. The express-fileupload middleware, with useTempFiles: true, saves the uploaded file as a temporary file.
+    */
     console.log(result);
     const { name, description, price, category, quantity, shipping } = req.body; //
 
