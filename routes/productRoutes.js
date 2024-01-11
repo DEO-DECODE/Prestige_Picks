@@ -23,7 +23,7 @@ router.post(
   "/create-product",
   requireSignIn,
   isAdmin,
-  formidable(),
+  // formidable(),
   createProductController
 );
 //routes
