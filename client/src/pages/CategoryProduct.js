@@ -35,7 +35,8 @@ const CategoryProduct = () => {
               {products?.map((p) => (
                 <div className="card m-2" key={p._id}>
                   <img
-                    src={`/api/v1/product/product-photo/${p._id}`}
+                    // src={`/api/v1/product/product-photo/${p._id}`}
+                    src={p.photo}
                     className="card-img-top"
                     alt={p.name}
                   />

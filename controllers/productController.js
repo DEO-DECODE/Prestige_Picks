@@ -6,13 +6,13 @@ import fs from "fs";
 import slugify from "slugify";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
-
+//configure env
+dotenv.config({ path: "config.env" });
 cloudinary.config({
-  cloud_name: "dsv1ygvzx",
-  api_key: "199746351251338",
-  api_secret: "m3hq3XcE2hwSMpBtvQqcgHfVQSE",
+  cloud_name: process.env.CLOUDINARY_cloud_name,
+  api_key: process.env.CLOUDINARY_api_key,
+  api_secret: process.env.CLOUDINARY_api_secret,
 });
-dotenv.config();
 
 //payment gateway
 // var gateway = new braintree.BraintreeGateway({
@@ -22,63 +22,6 @@ dotenv.config();
 //   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
 // });
 
-// export const createProductController = async (req, res) => {
-//   try {
-//     const file = req.files.photo;
-//     // Storing Photo in file.
-//     cloudinary.uploader.upload(file.tempFilePath, async (err, result) => {
-//       console.log(result);
-//       try {
-//         const { name, description, price, category, quantity, shipping } =
-//           req.fields;
-//         // const { photo } = req.files;
-//         //validations
-//         switch (true) {
-//           case !name:
-//             return res.status(500).send({ error: "Name is Required" });
-//           case !description:
-//             return res.status(500).send({ error: "Description is Required" });
-//           case !price:
-//             return res.status(500).send({ error: "Price is Required" });
-//           case !category:
-//             return res.status(500).send({ error: "Category is Required" });
-//           case !quantity:
-//             return res.status(500).send({ error: "Quantity is Required" });
-//         }
-
-//         const products = new productModel({
-//           ...req.fields,
-//           slug: slugify(name),
-//           photo: result.url,
-//         });
-//         await products.save();
-//         res.status(201).send({
-//           success: true,
-//           message: "Product Created Successfully",
-//           products,
-//         });
-//       } catch (error) {
-//         console.log(error);
-//         res.status(500).send({
-//           success: false,
-//           error,
-//           message: "Error in creating product",
-//         });
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send({
-//       success: false,
-//       error,
-//       message: "Error in Uploading image",
-//     });
-//   }
-// };
-
-// Assuming 'req.fields' contains form fields and 'req.files.photo' is the uploaded file
-
-
 export const createProductController = async (req, res) => {
   try {
     // console.log(req.body);
@@ -87,11 +30,11 @@ export const createProductController = async (req, res) => {
     // Storing Photo in file using promises instead of callback
     const result = await cloudinary.uploader.upload(file.tempFilePath);
     console.log(result);
-    const { name, description, price, category, quantity, shipping } = req.body; // Use req.body instead of req.fields
+    const { name, description, price, category, quantity, shipping } = req.body; //
 
     // Validations
     if (!name || !description || !price || !category || !quantity) {
-      return res.status(400).send({ error: 'All fields are required' });
+      return res.status(400).send({ error: "All fields are required" });
     }
 
     const slug = slugify(name);
@@ -111,15 +54,15 @@ export const createProductController = async (req, res) => {
 
     res.status(201).send({
       success: true,
-      message: 'Product Created Successfully',
+      message: "Product Created Successfully",
       products,
     });
   } catch (error) {
     console.error(error);
     res.status(500).send({
       success: false,
-      error: error.message || 'Error in creating product',
-      message: 'Error in creating product',
+      error: error.message || "Error in creating product",
+      message: "Error in creating product",
     });
   }
 };
@@ -170,22 +113,22 @@ export const getSingleProductController = async (req, res) => {
 };
 
 // get photo
-export const productPhotoController = async (req, res) => {
-  try {
-    const product = await productModel.findById(req.params.pid).select("photo");
-    if (product.photo.data) {
-      res.set("Content-type", product.photo.contentType);
-      return res.status(200).send(product.photo.data);
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Erorr while getting photo",
-      error,
-    });
-  }
-};
+// export const productPhotoController = async (req, res) => {
+//   try {
+//     const product = await productModel.findById(req.params.pid).select("photo");
+//     if (product.photo.data) {
+//       res.set("Content-type", product.photo.contentType);
+//       return res.status(200).send(product.photo.data);
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send({
+//       success: false,
+//       message: "Erorr while getting photo",
+//       error,
+//     });
+//   }
+// };
 
 //delete controller
 export const deleteProductController = async (req, res) => {
@@ -301,7 +244,6 @@ export const productListController = async (req, res) => {
     const page = req.params.page ? req.params.page : 1;
     const products = await productModel
       .find({})
-      .select("-photo")
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 });
