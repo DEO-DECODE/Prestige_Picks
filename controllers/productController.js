@@ -28,6 +28,7 @@ cloudinary.config({
 export const createProductController = async (req, res) => {
   try {
     // console.log(req.body);
+    console.log(req.files);
     const file = req.files.photo;
     /*
      it retrieves the uploaded file from the req.files object. The photo property corresponds to the field name used in the HTML form for the file upload.
@@ -36,7 +37,7 @@ export const createProductController = async (req, res) => {
     /*
     file.tempFilePath is the path to the temporary file on the server's filesystem. The express-fileupload middleware, with useTempFiles: true, saves the uploaded file as a temporary file.
     */
-    console.log(result);
+    // console.log(result);
     const { name, description, price, category, quantity, shipping } = req.body; //
 
     // Validations
@@ -102,8 +103,8 @@ export const getSingleProductController = async (req, res) => {
   try {
     const product = await productModel
       .findOne({ slug: req.params.slug })
-      .select("-photo")
       .populate("category");
+    console.log(product);
     res.status(200).send({
       success: true,
       message: "Single Product Fetched",
@@ -140,7 +141,7 @@ export const getSingleProductController = async (req, res) => {
 //delete controller
 export const deleteProductController = async (req, res) => {
   try {
-    await productModel.findByIdAndDelete(req.params.pid).select("-photo");
+    await productModel.findByIdAndDelete(req.params.pid);
     res.status(200).send({
       success: true,
       message: "Product Deleted successfully",
@@ -156,50 +157,127 @@ export const deleteProductController = async (req, res) => {
 };
 
 //upate producta
+// export const updateProductController = async (req, res) => {
+//   try {
+//     // console.log(req.body);
+//     if (req.files.photo !== null) {
+//       const file = req.files.photo;
+//       console.log(req.files);
+//       /*
+//      it retrieves the uploaded file from the req.files object. The photo property corresponds to the field name used in the HTML form for the file upload.
+//      */
+//       const result = await cloudinary.uploader.upload(file.tempFilePath);
+
+//       /*
+//     file.tempFilePath is the path to the temporary file on the server's filesystem. The express-fileupload middleware, with useTempFiles: true, saves the uploaded file as a temporary file.
+//     */
+//       // console.log(result);
+//       const { name, description, price, category, quantity, shipping } =
+//         req.body; //
+
+//       // Validations
+//       if (!name || !description || !price || !category || !quantity) {
+//         return res.status(400).send({ error: "All fields are required" });
+//       }
+
+//       const products = await productModel.findByIdAndUpdate(
+//         req.params.pid,
+//         { ...req.body, slug: slugify(name), photo: result.url },
+//         { new: true }
+//       );
+//     } else {
+//       const { name, description, price, category, quantity, shipping } =
+//         req.body; //
+
+//       // Validations
+//       if (!name || !description || !price || !category || !quantity) {
+//         return res.status(400).send({ error: "All fields are required" });
+//       }
+
+//       const products = await productModel.findByIdAndUpdate(
+//         req.params.pid,
+//         { ...req.body, slug: slugify(name) },
+//         { new: true }
+//       );
+//     }
+//     console.log(products);
+//     await products.save();
+
+//     res.status(201).send({
+//       success: true,
+//       message: "Product Updated Successfully",
+//       products,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send({
+//       success: false,
+//       error: error.message || "Error in Updating product",
+//       message: "Error in updating product",
+//     });
+//   }
+// };
 export const updateProductController = async (req, res) => {
   try {
-    const { name, description, price, category, quantity, shipping } =
-      req.fields;
-    const { photo } = req.files;
-    //alidation
-    switch (true) {
-      case !name:
-        return res.status(500).send({ error: "Name is Required" });
-      case !description:
-        return res.status(500).send({ error: "Description is Required" });
-      case !price:
-        return res.status(500).send({ error: "Price is Required" });
-      case !category:
-        return res.status(500).send({ error: "Category is Required" });
-      case !quantity:
-        return res.status(500).send({ error: "Quantity is Required" });
-      case photo && photo.size > 1000000:
-        return res
-          .status(500)
-          .send({ error: "photo is Required and should be less then 1mb" });
-    }
+    // console.log(req.body);
 
-    const products = await productModel.findByIdAndUpdate(
-      req.params.pid,
-      { ...req.fields, slug: slugify(name) },
-      { new: true }
-    );
-    if (photo) {
-      products.photo.data = fs.readFileSync(photo.path);
-      products.photo.contentType = photo.type;
+    if (req.files && req.files.photo) {
+      const file = req.files.photo;
+      console.log(req.files);
+
+      // Retrieve the uploaded file from the req.files object
+      const result = await cloudinary.uploader.upload(file.tempFilePath);
+
+      // Validations
+      const { name, description, price, category, quantity, shipping } = req.body;
+      if (!name || !description || !price || !category || !quantity) {
+        return res.status(400).send({ error: "All fields are required" });
+      }
+
+      const products = await productModel.findByIdAndUpdate(
+        req.params.pid,
+        { ...req.body, slug: slugify(name), photo: result.url },
+        { new: true }
+      );
+
+      console.log(products);
+      await products.save();
+
+      res.status(201).send({
+        success: true,
+        message: "Product Updated Successfully",
+        products,
+      });
+    } else {
+      // If req.files or req.files.photo is null, proceed without uploading a new photo
+      const { name, description, price, category, quantity, shipping } = req.body;
+
+      // Validations
+      if (!name || !description || !price || !category || !quantity) {
+        return res.status(400).send({ error: "All fields are required" });
+      }
+
+      const products = await productModel.findByIdAndUpdate(
+        req.params.pid,
+        { ...req.body, slug: slugify(name) },
+        { new: true }
+      );
+
+      console.log(products);
+      await products.save();
+
+      res.status(201).send({
+        success: true,
+        message: "Product Updated Successfully",
+        products,
+      });
     }
-    await products.save();
-    res.status(201).send({
-      success: true,
-      message: "Product Updated Successfully",
-      products,
-    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send({
       success: false,
-      error,
-      message: "Error in Updte product",
+      error: error.message || "Error in Updating product",
+      message: "Error in updating product",
     });
   }
 };
@@ -272,14 +350,13 @@ export const productListController = async (req, res) => {
 export const searchProductController = async (req, res) => {
   try {
     const { keyword } = req.params;
-    const resutls = await productModel
-      .find({
-        $or: [
-          { name: { $regex: keyword, $options: "i" } },
-          { description: { $regex: keyword, $options: "i" } },
-        ],
-      })
-      .select("-photo");
+    const resutls = await productModel.find({
+      $or: [
+        { name: { $regex: keyword, $options: "i" } },
+        { description: { $regex: keyword, $options: "i" } },
+      ],
+    });
+    // .select("-photo");
     res.json(resutls);
   } catch (error) {
     console.log(error);
@@ -300,7 +377,7 @@ export const realtedProductController = async (req, res) => {
         category: cid,
         _id: { $ne: pid },
       })
-      .select("-photo")
+      // .select("-photo")
       .limit(3)
       .populate("category");
     res.status(200).send({

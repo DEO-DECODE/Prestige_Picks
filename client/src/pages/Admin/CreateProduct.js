@@ -45,7 +45,7 @@ const CreateProduct = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      console.log("Toke in handleCreate : ", auth?.token);
+      // console.log("Toke in handleCreate : ", auth?.token);
       const productData = new FormData();
       productData.append("name", name);
       productData.append("description", description);
@@ -135,8 +135,8 @@ const CreateProduct = () => {
                   <div className="text-center">
                     <img
                       src={URL.createObjectURL(photo)}
-                      /*URL.createObjectURL(photo): This method takes a Blob or File object (in this case, the photo file) and creates a unique URL that represents the content of that file. 
-                      */
+                      /*URL.createObjectURL(photo): This method takes a Blob or File object (in this case, the photo file) and creates a unique URL that represents the content of that file.
+                       */
                       alt="product_photo"
                       height={"200px"}
                       className="img img-responsive"
