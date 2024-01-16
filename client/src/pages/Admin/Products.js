@@ -1,28 +1,34 @@
 import React, { useState, useEffect } from "react";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "./../../components/Layout/Layout";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
+
 const Products = () => {
   const [products, setProducts] = useState([]);
 
-  //getall products
+  // get all products
   const getAllProducts = async () => {
     try {
-      const { data } = await axios.get("/api/v1/product/get-product");
-      setProducts(data.products);
-      console.log(products);
+      const response = await fetch("/api/v1/product/get-product");
+      const data = await response.json();
+      console.log(response);
+      if (response.ok) {
+        setProducts(data.products);
+        console.log(products);
+      } else {
+        toast.error(data.message);
+      }
     } catch (error) {
       console.log(error);
-      toast.error("Someething Went Wrong");
+      toast.error("Something Went Wrong");
     }
   };
 
-  //lifecycle method
   useEffect(() => {
     getAllProducts();
   }, []);
+
   return (
     <Layout>
       <div className="row dashboard">
@@ -39,11 +45,7 @@ const Products = () => {
                 className="product-link"
               >
                 <div className="card m-2" style={{ width: "18rem" }}>
-                  <img
-                    src={p.photo}
-                    className="card-img-top"
-                    alt={p.name}
-                  />
+                  <img src={p.photo} className="card-img-top" alt={p.name} />
                   <div className="card-body">
                     <h5 className="card-title">{p.name}</h5>
                     <p className="card-text">{p.description}</p>

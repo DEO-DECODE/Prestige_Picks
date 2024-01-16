@@ -56,7 +56,28 @@ const CreateProduct = () => {
       /*
       The FormData object is a built-in JavaScript object that provides a way to easily construct a set of key/value pairs representing form fields and their values. It is commonly used when making HTTP requests, especially when you need to send data as part of a multipart/form-data request, which is typically used for file uploads.
       */
-
+      // console.log(photo);
+      /*
+      File {name: 'soap1.png', lastModified: 1705346213393, lastModifiedDate: Tue Jan 16 2024 00:46:53 GMT+0530 (India Standard Time), webkitRelativePath: '', size: 112400, …}
+lastModified
+: 
+1705346213393
+lastModifiedDate
+: 
+Tue Jan 16 2024 00:46:53 GMT+0530 (India Standard Time) {}
+name
+: 
+"soap1.png"
+size
+: 
+112400
+type
+: 
+"image/png"
+webkitRelativePath
+: 
+""
+      */
       const response = await fetch("/api/v1/product/create-product", {
         method: "POST",
         body: productData,
