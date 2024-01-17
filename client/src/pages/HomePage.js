@@ -5,7 +5,7 @@ import { Prices } from "../components/Prices";
 import { useCart } from "../context/cart";
 import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
-import { AiOutlineReload } from "react-icons/ai";
+import InfiniteScroll from "react-infinite-scroll-component";
 import "../styles/Homepage.css";
 
 const HomePage = () => {
@@ -36,6 +36,7 @@ const HomePage = () => {
   useEffect(() => {
     getAllCategory();
     getTotal();
+    getAllProducts();
   }, []);
 
   // get products
@@ -58,23 +59,28 @@ const HomePage = () => {
     try {
       const response = await fetch("/api/v1/product/product-count");
       const data = await response.json();
-
+      console.log("Total : ", total);
       setTotal(data?.total);
     } catch (error) {
       console.log(error);
     }
   };
 
-  useEffect(() => {
-    if (page === 1) return;
-    loadMore();
-  }, [page]);
+  // useEffect(() => {
+  //   if (page === 1) return;
+  //   fetchMoreData();
+  // }, [page]);
 
   // load more
-  const loadMore = async () => {
+  const fetchMoreData = async () => {
+    const nextPage = page + 1;
+    setPage(nextPage);
+    console.log("Triggering Fetch more data ");
+    console.log("Current length: ", products.length);
     try {
       setLoading(true);
-      const response = await fetch(`/api/v1/product/product-list/${page}`);
+      console.log("Sending Response for Page : ", nextPage);
+      const response = await fetch(`/api/v1/product/product-list/${nextPage}`);
       const data = await response.json();
 
       setLoading(false);
@@ -84,7 +90,6 @@ const HomePage = () => {
       setLoading(false);
     }
   };
-
   // filter by category
   const handleFilter = (value, id) => {
     let all = [...checked];
@@ -125,8 +130,6 @@ const HomePage = () => {
   return (
     <Layout title={"All Products - Best offers "}>
       <h1>All Products</h1>
-      {/* banner image */}
-      {/* banner image */}
       <div className="container-fluid row mt-3 home-page">
         <div className="col-md-3 filters">
           <h4 className="text-center">Filter By Category</h4>
@@ -162,72 +165,60 @@ const HomePage = () => {
         </div>
         <div className="col-md-9 ">
           <h1 className="text-center">All Products</h1>
-          <div className="d-flex flex-wrap">
-            {products?.map((p) => (
-              <div className="card m-2" key={p._id}>
-                <img
-                  src={p.photo}
-                  className="card-img-top"
-                  alt={p.name}
-                />
-                <div className="card-body">
-                  <div className="card-name-price">
-                    <h5 className="card-title">{p.name}</h5>
-                    <h5 className="card-title card-price">
-                      {p.price.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </h5>
-                  </div>
-                  <p className="card-text ">
-                    {p.description.substring(0, 60)}...
-                  </p>
-                  <div className="card-name-price">
-                    <button
-                      className="btn btn-info ms-1"
-                      onClick={() => navigate(`/product/${p.slug}`)}
-                    >
-                      More Details
-                    </button>
-                    <button
-                      className="btn btn-dark ms-1"
-                      onClick={() => {
-                        setCart([...cart, p]);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify([...cart, p])
-                        );
-                        toast.success("Item Added to cart");
-                      }}
-                    >
-                      ADD TO CART
-                    </button>
+          <InfiniteScroll
+            dataLength={products ? products.length : 0}
+            next={fetchMoreData}
+            hasMore={products && products.length !== total}
+            loader={<h4>Loading...</h4>}
+            endMessage={
+              <p style={{ textAlign: "center" }}>
+                <b>Yay! You have seen it all</b>
+              </p>
+            }
+          >
+            <div className="d-flex flex-wrap">
+              {products?.map((p) => (
+                <div className="card m-2" key={p._id}>
+                  <img src={p.photo} className="card-img-top" alt={p.name} />
+                  <div className="card-body">
+                    <div className="card-name-price">
+                      <h5 className="card-title">{p.name}</h5>
+                      <h5 className="card-title card-price">
+                        {p.price.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                      </h5>
+                    </div>
+                    <p className="card-text ">
+                      {p.description.substring(0, 60)}...
+                    </p>
+                    <div className="card-name-price">
+                      <button
+                        className="btn btn-info ms-1"
+                        onClick={() => navigate(`/product/${p.slug}`)}
+                      >
+                        More Details
+                      </button>
+                      <button
+                        className="btn btn-dark ms-1"
+                        onClick={() => {
+                          setCart([...cart, p]);
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify([...cart, p])
+                          );
+                          toast.success("Item Added to cart");
+                        }}
+                      >
+                        ADD TO CART
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className="m-2 p-3">
-            {products && products.length < total && (
-              <button
-                className="btn loadmore"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage(page + 1);
-                }}
-              >
-                {loading ? (
-                  "Loading ..."
-                ) : (
-                  <>
-                    {" "}
-                    Loadmore <AiOutlineReload />
-                  </>
-                )}
-              </button>
-            )}
-          </div>
+              ))}
+            </div>
+          </InfiniteScroll>
         </div>
       </div>
     </Layout>

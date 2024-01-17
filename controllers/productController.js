@@ -83,7 +83,7 @@ export const getProductController = async (req, res) => {
       .populate("category")
       .sort({ createdAt: -1 });
       /*
-      s used to sort the retrieved documents based on the createdAt field in descending order
+       used to sort the retrieved documents based on the createdAt field in descending order
       */
     res.status(200).send({
       success: true,
