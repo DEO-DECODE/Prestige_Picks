@@ -36,12 +36,13 @@ const HomePage = () => {
   useEffect(() => {
     getAllCategory();
     getTotal();
-    getAllProducts();
+    // getAllProducts();
   }, []);
 
   // get products
   const getAllProducts = async () => {
     try {
+      console.log("Sending Response for Page in getAllProducts : ", page);
       setLoading(true);
       const response = await fetch(`/api/v1/product/product-list/${page}`);
       const data = await response.json();
@@ -66,12 +67,6 @@ const HomePage = () => {
     }
   };
 
-  // useEffect(() => {
-  //   if (page === 1) return;
-  //   fetchMoreData();
-  // }, [page]);
-
-  // load more
   const fetchMoreData = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
@@ -93,6 +88,8 @@ const HomePage = () => {
   // filter by category
   const handleFilter = (value, id) => {
     let all = [...checked];
+    console.log("Boolean" + value);
+    console.log(checked);
     if (value) {
       all.push(id);
     } else {
@@ -111,6 +108,8 @@ const HomePage = () => {
 
   // get filtered products
   const filterProduct = async () => {
+    console.log("Checked Array : "+ checked);
+    console.log("Radio : " + radio);
     try {
       const response = await fetch("/api/v1/product/product-filters", {
         method: "POST",
@@ -120,7 +119,11 @@ const HomePage = () => {
         body: JSON.stringify({ checked, radio }),
       });
       const data = await response.json();
-
+      data.products.map((elem)=>{
+        console.log(elem.name);
+        console.log("---");
+        console.log(elem.category);
+      })
       setProducts(data?.products);
     } catch (error) {
       console.log(error);
