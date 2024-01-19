@@ -88,6 +88,9 @@ const HomePage = () => {
 
   // filter by category
   const handleFilter = (value, id) => {
+    /*
+    if block is executed when you check a checkbox, and the else block is executed when you uncheck a checkbox. 
+    */
     let all = [...auth.checked];
     console.log("Boolean" + value);
     console.log(auth.checked);
@@ -95,18 +98,17 @@ const HomePage = () => {
       all.push(id);
     } else {
       all = all.filter((c) => c !== id);
+      /*
+      It ensures that the id of the category being unchecked is removed from the array of checked categories (all). 
+      */
     }
     setAuth({ ...auth, checked: all });
     // navigate("/filter");
   };
 
   useEffect(() => {
-    if (!auth.checked.length || !auth.radio.length) getAllProducts();
+    if (!auth.checked.length && !auth.radio.length) getAllProducts();
   }, [auth.checked.length, auth.radio.length]);
-
-  useEffect(() => {
-    if (auth.checked.length || auth.radio.length) handleFilter();
-  }, [auth.checked, auth.radio]);
 
   return (
     <Layout title={"All Products - Best offers "}>

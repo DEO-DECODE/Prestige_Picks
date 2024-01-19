@@ -232,6 +232,9 @@ export const productFiltersController = async (req, res) => {
 export const productCountController = async (req, res) => {
   try {
     const total = await productModel.find({}).estimatedDocumentCount();
+    /*
+    estimatedDocumentCount(); to get the estimated count of documents in the collection represented by the productModel
+    */
     res.status(200).send({
       success: true,
       total,
