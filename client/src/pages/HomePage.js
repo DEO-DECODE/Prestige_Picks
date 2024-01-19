@@ -7,14 +7,14 @@ import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "../styles/Homepage.css";
+import { useFilter } from "../context/filter";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useCart();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [checked, setChecked] = useState([]);
-  const [radio, setRadio] = useState([]);
+  const [auth, setAuth] = useFilter();
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ const HomePage = () => {
         setCategories(data?.category);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -51,7 +51,7 @@ const HomePage = () => {
       setProducts(data.products);
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -60,10 +60,10 @@ const HomePage = () => {
     try {
       const response = await fetch("/api/v1/product/product-count");
       const data = await response.json();
-      console.log("Total : ", total);
+      console.log("Total : ", data.total);
       setTotal(data?.total);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -79,56 +79,34 @@ const HomePage = () => {
       const data = await response.json();
 
       setLoading(false);
-      setProducts([...products, ...data?.products]);
+      setProducts((prevProducts) => [...prevProducts, ...data?.products]);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setLoading(false);
     }
   };
+
   // filter by category
   const handleFilter = (value, id) => {
-    let all = [...checked];
+    let all = [...auth.checked];
     console.log("Boolean" + value);
-    console.log(checked);
+    console.log(auth.checked);
     if (value) {
       all.push(id);
     } else {
       all = all.filter((c) => c !== id);
     }
-    setChecked(all);
+    setAuth({ ...auth, checked: all });
+    // navigate("/filter");
   };
 
   useEffect(() => {
-    if (!checked.length || !radio.length) getAllProducts();
-  }, [checked.length, radio.length]);
+    if (!auth.checked.length || !auth.radio.length) getAllProducts();
+  }, [auth.checked.length, auth.radio.length]);
 
   useEffect(() => {
-    if (checked.length || radio.length) filterProduct();
-  }, [checked, radio]);
-
-  // get filtered products
-  const filterProduct = async () => {
-    console.log("Checked Array : "+ checked);
-    console.log("Radio : " + radio);
-    try {
-      const response = await fetch("/api/v1/product/product-filters", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ checked, radio }),
-      });
-      const data = await response.json();
-      data.products.map((elem)=>{
-        console.log(elem.name);
-        console.log("---");
-        console.log(elem.category);
-      })
-      setProducts(data?.products);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    if (auth.checked.length || auth.radio.length) handleFilter();
+  }, [auth.checked, auth.radio]);
 
   return (
     <Layout title={"All Products - Best offers "}>
@@ -149,7 +127,9 @@ const HomePage = () => {
           {/* price filter */}
           <h4 className="text-center mt-4">Filter By Price</h4>
           <div className="d-flex flex-column">
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+            <Radio.Group
+              onChange={(e) => setAuth({ ...auth, radio: e.target.value })}
+            >
               {Prices?.map((p) => (
                 <div key={p._id}>
                   <Radio value={p.array}>{p.name}</Radio>
@@ -160,9 +140,11 @@ const HomePage = () => {
           <div className="d-flex flex-column">
             <button
               className="btn btn-danger"
-              onClick={() => window.location.reload()}
+              onClick={() => {
+                navigate("/filter");
+              }}
             >
-              RESET FILTERS
+              Apply Filters
             </button>
           </div>
         </div>
