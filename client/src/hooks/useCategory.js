@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 export default function useCategory() {
   const [categories, setCategories] = useState([]);
@@ -7,10 +6,16 @@ export default function useCategory() {
   //get cat
   const getCategories = async () => {
     try {
-      const { data } = await axios.get("/api/v1/category/get-category");
-      setCategories(data?.category);
+      const response = await fetch("/api/v1/category/get-category");
+
+      if (response.ok) {
+        const data = await response.json();
+        setCategories(data?.category);
+      } else {
+        console.log("Error in fetching categories");
+      }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
