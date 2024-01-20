@@ -35,7 +35,7 @@ const Filter = () => {
         });
 
         setProducts(data?.products);
-        setAuth({ checked: [], radio: [] }); // Fix: Corrected the syntax here
+        setAuth({ checked: [], radio: [] });
       }
     } catch (error) {
       console.error(error);
