@@ -82,7 +82,7 @@ export const getProductController = async (req, res) => {
       .find({})
       .populate("category")
       .sort({ createdAt: -1 });
-      /*
+    /*
        used to sort the retrieved documents based on the createdAt field in descending order
       */
     res.status(200).send({
@@ -122,7 +122,6 @@ export const getSingleProductController = async (req, res) => {
   }
 };
 
-
 //delete controller
 export const deleteProductController = async (req, res) => {
   try {
@@ -153,7 +152,8 @@ export const updateProductController = async (req, res) => {
       const result = await cloudinary.uploader.upload(file.tempFilePath);
 
       // Validations
-      const { name, description, price, category, quantity, shipping } = req.body;
+      const { name, description, price, category, quantity, shipping } =
+        req.body;
       if (!name || !description || !price || !category || !quantity) {
         return res.status(400).send({ error: "All fields are required" });
       }
@@ -174,7 +174,8 @@ export const updateProductController = async (req, res) => {
       });
     } else {
       // If req.files or req.files.photo is null, proceed without uploading a new photo
-      const { name, description, price, category, quantity, shipping } = req.body;
+      const { name, description, price, category, quantity, shipping } =
+        req.body;
 
       // Validations
       if (!name || !description || !price || !category || !quantity) {
@@ -305,8 +306,9 @@ export const realtedProductController = async (req, res) => {
         category: cid,
         _id: { $ne: pid },
       })
-      // .select("-photo")
-      .limit(3)
+      /*
+      $ne operator stands for "not equal." It is used to retrieve documents where a particular field is not equal to a specified value.
+      */
       .populate("category");
     res.status(200).send({
       success: true,
@@ -322,11 +324,15 @@ export const realtedProductController = async (req, res) => {
   }
 };
 
-// get prdocyst by catgory
+// get products by catgory
 export const productCategoryController = async (req, res) => {
   try {
     const category = await categoryModel.findOne({ slug: req.params.slug });
     const products = await productModel.find({ category }).populate("category");
+    /*
+    At first we are fetching the category and then , we are using that category to find the products related to that category.
+    */
+
     res.status(200).send({
       success: true,
       category,
