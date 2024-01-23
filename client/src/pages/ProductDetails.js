@@ -6,7 +6,7 @@ import "../styles/ProductDetailsStyles.css";
 const ProductDetails = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [product, setProduct] = useState({});
+  const [product, setProduct] = useState([]);
   const [relatedProducts, setRelatedProducts] = useState([]);
 
   //initial details
