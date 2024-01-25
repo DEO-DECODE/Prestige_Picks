@@ -7,8 +7,13 @@ import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
 import InfiniteScroll from "react-infinite-scroll-component";
 import "../styles/Homepage.css";
+import "../styles/CardImage.css";
 import { useFilter } from "../context/filter";
-
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faInfoCircle,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 const HomePage = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useCart();
@@ -79,6 +84,7 @@ const HomePage = () => {
       const data = await response.json();
 
       setLoading(false);
+      console.log(products);
       setProducts((prevProducts) => [...prevProducts, ...data?.products]);
     } catch (error) {
       console.error(error);
@@ -165,41 +171,41 @@ const HomePage = () => {
           >
             <div className="d-flex flex-wrap">
               {products?.map((p) => (
-                <div className="card m-2" key={p._id}>
-                  <img src={p.photo} className="card-img-top" alt={p.name} />
-                  <div className="card-body">
-                    <div className="card-name-price">
-                      <h5 className="card-title">{p.name}</h5>
-                      <h5 className="card-title card-price">
-                        {p.price.toLocaleString("en-US", {
-                          style: "currency",
-                          currency: "USD",
-                        })}
-                      </h5>
-                    </div>
-                    <p className="card-text ">
-                      {p.description.substring(0, 60)}...
-                    </p>
-                    <div className="card-name-price">
-                      <button
-                        className="btn btn-info ms-1"
-                        onClick={() => navigate(`/product/${p.slug}`)}
-                      >
-                        More Details
-                      </button>
-                      <button
-                        className="btn btn-dark ms-1"
-                        onClick={() => {
-                          setCart([...cart, p]);
-                          localStorage.setItem(
-                            "cart",
-                            JSON.stringify([...cart, p])
-                          );
-                          toast.success("Item Added to cart");
-                        }}
-                      >
-                        ADD TO CART
-                      </button>
+                <div className="product-card" key={p._id}>
+                  <div className="badge">Hot</div>
+                  <div className="product-tumb">
+                    <img src={p.photo} alt={p.name} />
+                  </div>
+                  <div className="product-details">
+                    <span className="product-catagory">{p.category.name}</span>
+                    <h4>{p.name}</h4>
+                    <p>{p.description.substring(0, 60)}...</p>
+                    <div className="product-bottom-details">
+                      <div className="product-price">
+                        <small>
+                          {p.price.toLocaleString("en-US", {
+                            style: "currency",
+                            currency: "USD",
+                          })}
+                        </small>
+                      </div>
+                      <div className="product-links">
+                        <button onClick={() => navigate(`/product/${p.slug}`)}>
+                          <FontAwesomeIcon icon={faInfoCircle} />
+                        </button>
+                        <button
+                          onClick={() => {
+                            setCart([...cart, p]);
+                            localStorage.setItem(
+                              "cart",
+                              JSON.stringify([...cart, p])
+                            );
+                            toast.success("Item Added to cart");
+                          }}
+                        >
+                          <FontAwesomeIcon icon={faShoppingCart} />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

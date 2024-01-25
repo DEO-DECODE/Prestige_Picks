@@ -83,8 +83,8 @@ export const getProductController = async (req, res) => {
       .populate("category")
       .sort({ createdAt: -1 });
     /*
-       used to sort the retrieved documents based on the createdAt field in descending order
-      */
+     used to sort the retrieved documents based on the createdAt field in descending order
+    */
     res.status(200).send({
       success: true,
       counTotal: products.length,
@@ -106,7 +106,7 @@ export const getSingleProductController = async (req, res) => {
     const product = await productModel
       .findOne({ slug: req.params.slug })
       .populate("category");
-    console.log(product);
+    // console.log(product);
     res.status(200).send({
       success: true,
       message: "Single Product Fetched",
@@ -258,6 +258,7 @@ export const productListController = async (req, res) => {
     const page = req.params.page ? req.params.page : 1;
     const products = await productModel
       .find({})
+      .populate("category")
       .skip((page - 1) * perPage)
       .limit(perPage)
       .sort({ createdAt: -1 });

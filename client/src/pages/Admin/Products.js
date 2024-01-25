@@ -3,7 +3,7 @@ import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "./../../components/Layout/Layout";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-
+import "../../styles/CardImage.css"
 const Products = () => {
   const [products, setProducts] = useState([]);
 
@@ -44,11 +44,15 @@ const Products = () => {
                 to={`/dashboard/admin/product/${p.slug}`}
                 className="product-link"
               >
-                <div className="card m-2" style={{ width: "18rem" }}>
-                  <img src={p.photo} className="card-img-top" alt={p.name} />
-                  <div className="card-body">
-                    <h5 className="card-title">{p.name}</h5>
-                    <p className="card-text">{p.description}</p>
+                <div className="product-card" key={p._id}>
+                  <div className="badge">Hot</div>
+                  <div className="product-tumb">
+                    <img src={p.photo} alt={p.name} />
+                  </div>
+                  <div className="product-details">
+                    <span className="product-catagory">{p.category.name}</span>
+                    <h4>{p.name}</h4>
+                    <p>{p.description.substring(0, 60)}...</p>
                   </div>
                 </div>
               </Link>

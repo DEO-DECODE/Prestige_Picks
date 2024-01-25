@@ -4,6 +4,12 @@ import { useCart } from "../context/cart";
 import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
 import { useFilter } from "../context/filter";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../styles/CardImage.css";
+import {
+  faInfoCircle,
+  faShoppingCart,
+} from "@fortawesome/free-solid-svg-icons";
 import "../styles/Homepage.css";
 const Filter = () => {
   const navigate = useNavigate();
@@ -46,45 +52,45 @@ const Filter = () => {
     <Layout title={"Showing Results Based on your Search"}>
       <h1>All Products</h1>
       <div className="container-fluid row mt-3 home-page">
-        <div className="col-md-9 ">
-          <h1 className="text-center">All Products</h1>
+        <div className="col-md-12">
+          <h1 className="text-center">Showing Results Based On Your Filter</h1>
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
-              <div className="card m-2" key={p._id}>
-                <img src={p.photo} className="card-img-top" alt={p.name} />
-                <div className="card-body">
-                  <div className="card-name-price">
-                    <h5 className="card-title">{p.name}</h5>
-                    <h5 className="card-title card-price">
-                      {p.price.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </h5>
-                  </div>
-                  <p className="card-text ">
-                    {p.description.substring(0, 60)}...
-                  </p>
-                  <div className="card-name-price">
-                    <button
-                      className="btn btn-info ms-1"
-                      onClick={() => navigate(`/product/${p.slug}`)}
-                    >
-                      More Details
-                    </button>
-                    <button
-                      className="btn btn-dark ms-1"
-                      onClick={() => {
-                        setCart([...cart, p]);
-                        localStorage.setItem(
-                          "cart",
-                          JSON.stringify([...cart, p])
-                        );
-                        toast.success("Item Added to cart");
-                      }}
-                    >
-                      ADD TO CART
-                    </button>
+              <div className="product-card" key={p._id}>
+                <div className="badge">Hot</div>
+                <div className="product-tumb">
+                  <img src={p.photo} alt={p.name} />
+                </div>
+                <div className="product-details">
+                  <span className="product-catagory">{p.category.name}</span>
+                  <h4>{p.name}</h4>
+                  <p>{p.description.substring(0, 60)}...</p>
+                  <div className="product-bottom-details">
+                    <div className="product-price">
+                      <small>
+                        {p.price.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                      </small>
+                    </div>
+                    <div className="product-links">
+                      <button onClick={() => navigate(`/product/${p.slug}`)}>
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCart([...cart, p]);
+                          localStorage.setItem(
+                            "cart",
+                            JSON.stringify([...cart, p])
+                          );
+                          toast.success("Item Added to cart");
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faShoppingCart} />
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
