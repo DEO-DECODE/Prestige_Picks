@@ -6,6 +6,7 @@ import { useCart } from "../context/cart";
 import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Carousel from "../components/Carousel";
 import "../styles/Homepage.css";
 import "../styles/CardImage.css";
 import { useFilter } from "../context/filter";
@@ -118,7 +119,7 @@ const HomePage = () => {
 
   return (
     <Layout title={"All Products - Best offers "}>
-      <h1>All Products</h1>
+      <Carousel/>
       <div className="container-fluid row mt-3 home-page">
         <div className="col-md-3 filters">
           <h4 className="text-center">Filter By Category</h4>
