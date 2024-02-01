@@ -30,7 +30,7 @@
 }
 .similar-products button {
   border-radius: 0;
-  width: 100%;
+  /* width: 100%; */
   border-top-left-radius: 5px;
   border-bottom-right-radius: 5px;
   font-size: 14px;
@@ -47,4 +47,122 @@
 
 .similar-products .card-img-top {
   height: 300px !important;
+}
+
+/* Modifying */
+/*reset*/
+/*product info */
+
+.card h1 {
+  color: #fbb72c;
+  font-weight: bold;
+  font-size: 32px;
+  margin-top: 2rem;
+  display: inline-block;
+}
+
+.details h3 {
+  color: #ffffff;
+  margin-top: 2rem;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.details h2 {
+  color: #ffffff;
+  /* font-family: "muli"; */
+  margin-top: 2rem;
+  font-weight: 800;
+  font-size: 29px;
+}
+.details h4 {
+  display: inline-block;
+  color: #ffffff;
+  /* font-family: "muli"; */
+  margin-top: 10px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.foot {
+  color: #ffffff;
+  /* font-family: "muli"; */
+  margin-top: 20px;
+  margin-right: 50px;
+  font-weight: 500;
+  font-size: 15px;
+  float: left;
+  transition: 0.3s all ease;
+}
+
+.foot:hover {
+  color: #f76b39;
+  cursor: pointer;
+}
+
+/*shoe slider indicator*/
+/*main card*/
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  background: #252831
+    url(https://www.dropbox.com/s/fuadz3vmw2nsylm/bg.png?raw=1) no-repeat;
+  height: 600px;
+  width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 20px 20px #dfdfdf;
+  margin-top: 4rem;
+  /* border: 2px solid blue; */
+}
+
+.left {
+  content: "";
+  height: 70%;
+  width: 48%;
+  display: flex;
+  align-items: center;
+  background-color:#fbb72c;
+  /* margin-left: 93px; */
+  border-radius: 0% 50% 50% 0%;
+  position: relative;
+  /* z-index: 5; */
+  /* border: 2px solid red; */
+}
+
+.left img {
+  position: absolute;
+  /* margin-left: -100px; */
+  /* margin-top: 60px; */
+  left: -10rem;
+  height: 80%;
+  width: 90%;
+}
+
+.right {
+  content: "";
+  height: 70%;
+  width: 50%;
+  background-color: #2a2f40;
+  /* z-index: 3; */
+  /* margin-left: 200px; */
+  position: relative;
+  /* border: 2px solid yellow; */
+}
+
+.product-info {
+  position: absolute;
+  /* margin-left: 245px; */
+  height: 394px;
+  width: 305px;
+  right: 0;
+  z-index: 10;
+  /* border: 2px solid pink; */
+}
+/* Text Styling */
+.product-name h1 {
 }

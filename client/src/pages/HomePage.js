@@ -14,6 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faInfoCircle,
   faShoppingCart,
+  faFilter,
+  faList,
 } from "@fortawesome/free-solid-svg-icons";
 const HomePage = () => {
   const navigate = useNavigate();
@@ -24,7 +26,8 @@ const HomePage = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
+  const [showFilter, setShowFilter] = useState(false);
+  const [isButtonClicked, setButtonClicked] = useState(false);
   // get all categories
   const getAllCategory = async () => {
     try {
@@ -119,10 +122,16 @@ const HomePage = () => {
 
   return (
     <Layout title={"All Products - Best offers "}>
-      <Carousel/>
+      <Carousel />
       <div className="container-fluid row mt-3 home-page">
-        <div className="col-md-3 filters">
-          <h4 className="text-center">Filter By Category</h4>
+        <div
+          className="filter-icon"
+          onClick={() => setShowFilter((prevShowFilter) => !prevShowFilter)}
+        >
+          <FontAwesomeIcon icon={faList} size="2x" />
+        </div>
+        <div className={`col-md-3 filters ${showFilter ? "show-filter" : ""}`}>
+          <h4 className="text-center logoText">Filter By Category</h4>
           <div className="d-flex flex-column">
             {categories?.map((c) => (
               <Checkbox
@@ -134,7 +143,7 @@ const HomePage = () => {
             ))}
           </div>
           {/* price filter */}
-          <h4 className="text-center mt-4">Filter By Price</h4>
+          <h4 className="text-center logoText mt-4">Filter By Price</h4>
           <div className="d-flex flex-column">
             <Radio.Group
               onChange={(e) => setAuth({ ...auth, radio: e.target.value })}
@@ -148,9 +157,10 @@ const HomePage = () => {
           </div>
           <div className="d-flex flex-column">
             <button
-              className="btn btn-danger"
+              className={`btn logoText ${isButtonClicked ? "clicked" : ""}`}
               onClick={() => {
                 navigate("/filter");
+                setButtonClicked(true);
               }}
             >
               Apply Filters

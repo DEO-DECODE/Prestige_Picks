@@ -146,3 +146,32 @@
   color: #363636;;
   font-family: "Playfair Display", serif;
 }
+/* HomePage.css */
+
+/* Add this to your HomePage.css or any relevant stylesheet */
+.filter-icon {
+  position: relative;
+  top: 20px; /* Adjust the top position as needed */
+  left: 20px; /* Adjust the left position as needed */
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.filters {
+  position: relative;
+  top: 0;
+  left: -300px;
+  width: 300px;
+  height: 100%;
+  background-color: #fff;
+  transition: left 0.3s ease;
+  z-index: 1000;
+}
+
+.show-filter {
+  left: 0;
+}
+.clicked:hover {
+  background-color:  #999;
+  color: #363636;
+}
