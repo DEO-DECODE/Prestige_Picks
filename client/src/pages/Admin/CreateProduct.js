@@ -108,7 +108,7 @@ webkitRelativePath
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <h1>Create Product</h1>
+            <h1 className="logoText text-center">Create Product</h1>
             <div className="m-1 w-75">
               <Select
                 bordered={false}
@@ -218,7 +218,7 @@ webkitRelativePath
                 </Select>
               </div>
               <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleCreate}>
+                <button className="btn btn-warning" onClick={handleCreate}>
                   CREATE PRODUCT
                 </button>
               </div>

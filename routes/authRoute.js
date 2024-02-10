@@ -9,6 +9,7 @@ import {
   getAllOrdersController,
   orderStatusController,
   resetPassword,
+  google
 } from "../controllers/authController.js";
 import { isAdmin, requireSignIn } from "../middlewares/authMiddleware.js";
 
@@ -21,7 +22,7 @@ router.post("/register", registerController);
 
 //LOGIN || POST
 router.post("/login", loginController);
-
+router.post("/google", google);
 //Forgot Password || POST
 router.post("/forgot-password", forgotPassword);
 //Reset Password || PUT

@@ -131,7 +131,64 @@ export const loginController = async (req, res) => {
     });
   }
 };
-
+export const google = async (req, res) => {
+  try {
+    const user = await userModel.findOne({
+      email: req.body.email,
+    });
+    if (user) {
+      const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      res.status(200).send({
+        success: true,
+        message: "login Using Google successfully",
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          role: user.role,
+          avatar: user.avatar,
+        },
+        token,
+      });
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = await hashPassword(generatedPassword);
+      //save
+      const user = await new userModel({
+        name:
+          req.body.name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email,
+        password: hashedPassword,
+        avatar: req.body.photo,
+      }).save();
+      const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "7d",
+      });
+      res.status(200).send({
+        success: true,
+        message: "Ging Up Using Google successfull",
+        user: {
+          _id: user._id,
+          name: user.name,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+          role: user.role,
+        },
+        token,
+      });
+    }
+  } catch (error) {
+    console.log("Error in google Route");
+  }
+};
 
 //test controller
 export const testController = (req, res) => {
@@ -241,7 +298,6 @@ Updating The Password Using Nodemailer
 
 // Forgot Password
 export const forgotPassword = async (req, res, next) => {
-  
   const user = await userModel.findOne({ email: req.body.email });
 
   if (!user) {

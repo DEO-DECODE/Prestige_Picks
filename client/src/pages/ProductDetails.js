@@ -6,6 +6,9 @@ import { useCart } from "../context/cart";
 import "../styles/ProductDetailsStyles.css";
 import "../styles/CardImage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AOS from "aos";
+import "aos/dist/aos.css";
+
 import {
   faInfoCircle,
   faShoppingCart,
@@ -20,6 +23,7 @@ const ProductDetails = () => {
   const [cart, setCart] = useCart();
   //initial details
   useEffect(() => {
+    AOS.init();
     if (params?.slug) getProduct();
   }, [params?.slug]);
 
@@ -80,18 +84,18 @@ const ProductDetails = () => {
         </div>
       </div> */}
 
-      <div class="card">
+      <div class="detailsCard" data-aos="zoom-in">
         <div class="left">
           <img src={product.photo} alt={product.name} />
         </div>
-        <div class="right">
+        <div class="right" data-aos="fade-out">
           <div class="product-info">
             <div class="product-name">
               <h1>{product.name}</h1>
             </div>
-            <div class="details">
+            <div class="details" data-aos="fade-in">
               <h2>{product?.category?.name}</h2>
-              <h3>{product.description}</h3>
+              <div>{product.description}</div>
               <h4>
                 Price :
                 {product?.price?.toLocaleString("en-US", {
@@ -117,8 +121,14 @@ const ProductDetails = () => {
         </div>
       </div>
       <hr />
-      <div className="row  similar-products" style={{ width: "100%" }}>
-        <h4>Similar Products ➡️</h4>
+      <div
+        className="row  similar-products"
+        style={{ width: "100%" }}
+        data-aos="fade-right"
+      >
+        <h1 className="logoText" style={{ textAlign: "center" }}>
+          Showing Similar Products
+        </h1>
         {relatedProducts.length < 1 && (
           <p className="text-center">No Similar Products found</p>
         )}
