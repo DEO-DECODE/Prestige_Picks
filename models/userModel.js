@@ -4,8 +4,8 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
-      trim: true,
+      // required: true,
+      // trim: true,
     },
     email: {
       type: String,
@@ -18,15 +18,15 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
+      // required: true,
     },
     address: {
       type: {},
-      required: true,
+      // required: true,
     },
     answer: {
       type: String,
-      required: true,
+      // required: true,
     },
     role: {
       type: Number,

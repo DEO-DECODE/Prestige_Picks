@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
 import { useAuth } from "../../context/auth";
+import OAuth from "../../components/OAuth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -102,6 +103,7 @@ const Login = () => {
           <button type="submit" className="btn btn-primary">
             LOGIN
           </button>
+          <OAuth/>
         </form>
       </div>
     </Layout>

@@ -132,10 +132,14 @@ export const loginController = async (req, res) => {
   }
 };
 export const google = async (req, res) => {
+  // console.log(req.body);
   try {
+    // console.log("Before findOne query");
     const user = await userModel.findOne({
       email: req.body.email,
     });
+    // console.log("After findOne query");
+    // console.log("User found:", user);
     if (user) {
       const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
@@ -155,25 +159,31 @@ export const google = async (req, res) => {
         token,
       });
     } else {
+      // console.log("Else Part is executed at the moment");
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
       const hashedPassword = await hashPassword(generatedPassword);
       //save
+      console.log(req.body.name);
+      console.log(req.body.email);
+      // console.log(hashPassword);
+      console.log(req.body.photo);
       const user = await new userModel({
         name:
           req.body.name.split(" ").join("").toLowerCase() +
           Math.random().toString(36).slice(-4),
-        email,
+        email: req.body.email,
         password: hashedPassword,
         avatar: req.body.photo,
       }).save();
+
       const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
       });
       res.status(200).send({
         success: true,
-        message: "Ging Up Using Google successfull",
+        message: "Sign Up Using Google successfull",
         user: {
           _id: user._id,
           name: user.name,
@@ -187,6 +197,11 @@ export const google = async (req, res) => {
     }
   } catch (error) {
     console.log("Error in google Route");
+    res.status(500).send({
+      success: false,
+      message: "Error in Google Route",
+      error,
+    });
   }
 };
 
