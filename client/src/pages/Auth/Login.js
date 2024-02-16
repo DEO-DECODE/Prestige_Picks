@@ -100,10 +100,12 @@ const Login = () => {
             </button>
           </div>
 
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary my-2">
             LOGIN
           </button>
-          <OAuth/>
+          <div className="mb-3 my-2">
+            <OAuth />
+          </div>
         </form>
       </div>
     </Layout>

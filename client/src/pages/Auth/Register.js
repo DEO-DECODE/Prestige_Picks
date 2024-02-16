@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
 import { useAuth } from "../../context/auth";
 import OAuth from "../../components/OAuth";
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -122,7 +123,9 @@ const Register = () => {
           <button type="submit" className="btn btn-primary">
             REGISTER
           </button>
-          <OAuth/>
+          <div className="mb-3 my-2">
+            <OAuth />
+          </div>
         </form>
       </div>
     </Layout>

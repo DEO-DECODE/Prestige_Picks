@@ -4,6 +4,9 @@ import { app } from "../firebase";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/auth";
 import { useNavigate,useLocation } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { FaGoogle } from "react-icons/fa";
 const OAuth = () => {
   const [auth, setAuth] = useAuth();
   const navigate = useNavigate();
@@ -65,7 +68,7 @@ const OAuth = () => {
       type="button"
       className="btn btn-warning"
     >
-      Continue with google
+      Continue with <FaGoogle /> 
     </button>
   );
 };
