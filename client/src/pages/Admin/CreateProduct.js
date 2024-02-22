@@ -114,7 +114,7 @@ webkitRelativePath
                 bordered={false}
                 placeholder="Select a category"
                 size="large"
-                showSearch
+                showSearch={true}
                 className="form-select mb-3"
                 onChange={(value) => {
                   setCategory(value);

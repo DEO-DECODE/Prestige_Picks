@@ -28,7 +28,7 @@ const Search = () => {
           <div className="d-flex flex-wrap mt-4">
             {values?.results.map((p) => (
               <div className="product-card" key={p._id}>
-                <div className="badge">Hot</div>
+                <div className="badge">{p.quantity>=1?"In Stock":"Out Of Stock"}</div>
                 <div className="product-tumb">
                   <img src={p.photo} alt={p.name} />
                 </div>

@@ -10,10 +10,8 @@ import cors from "cors";
 import fileUpload from "express-fileupload";
 //configure env
 dotenv.config({ path: "config.env" });
-
 //databse config
 connectDB();
-
 //rest object
 const app = express();
 

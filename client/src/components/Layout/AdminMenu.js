@@ -3,13 +3,11 @@ import { Link } from "react-router-dom";
 import "../../styles/AdminMenu.css";
 
 const AdminMenu = () => {
-  // State object to track hover state for each link
   const [hoveredStates, setHoveredStates] = useState({
     createCategory: false,
     createProduct: false,
     products: false,
     orders: false,
-    // Add more links if needed
   });
 
   const handleMouseEnter = (linkName) => {

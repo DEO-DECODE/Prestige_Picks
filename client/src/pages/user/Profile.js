@@ -1,29 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import UserMenu from "../../components/Layout/UserMenu";
 import Layout from "./../../components/Layout/Layout";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { app } from "../../firebase";
 
 const Profile = () => {
   // context
   const [auth, setAuth] = useAuth();
-
+  const fileRef = useRef(null);
   // state
+  const [filePerc, setFilePerc] = useState(0);
+  const [fileUploadError, setFileUploadError] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [file, setFile] = useState(null);
+  const [avatar, setAvatar] = useState("");
 
   // get user data
   useEffect(() => {
-    const { email, name, phone, address } = auth?.user;
+    console.log(auth.user);
+    const { email, name, phone, address, avatar } = auth?.user;
     setName(name);
     setPhone(phone);
     setEmail(email);
     setAddress(address);
+    setAvatar(avatar);
   }, [auth?.user]);
+  useEffect(() => {
+    if (file) {
+      handleFileUpload(file);
+    }
+  }, [file]);
+  const handleFileUpload = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
 
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        setFilePerc(Math.round(progress));
+      },
+      (error) => {
+        setFileUploadError(true);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setAvatar(downloadURL);
+        });
+      }
+    );
+  };
   // form function
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -41,6 +81,7 @@ const Profile = () => {
           password,
           phone,
           address,
+          avatar,
         }),
       });
 
@@ -73,6 +114,45 @@ const Profile = () => {
             <div className="form-container" style={{ marginTop: "-40px" }}>
               <form onSubmit={handleSubmit}>
                 <h4 className="title">USER PROFILE</h4>
+
+                <div className="mb-3">
+                  <input
+                    type="file"
+                    ref={fileRef}
+                    hidden
+                    accept="image/*"
+                    autoFocus
+                    onChange={(e) => setFile(e.target.files[0])}
+                  />
+                  <div className="mb-3">
+                    {avatar && (
+                      <div className="text-center">
+                        <img
+                          onClick={() => fileRef.current.click()}
+                          src={avatar}
+                          alt="profile"
+                          height={"200px"}
+                          className="img img-responsive"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-sm self-center">
+                    {fileUploadError ? (
+                      <span className="text-red-700">
+                        Error Image upload (image must be less than 2 mb)
+                      </span>
+                    ) : filePerc > 0 && filePerc < 100 ? (
+                      <span className="text-slate-700">{`Uploading ${filePerc}%`}</span>
+                    ) : filePerc === 100 ? (
+                      <span className="text-green-700">
+                        Image successfully uploaded!
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </p>
+                </div>
                 <div className="mb-3">
                   <input
                     type="text"

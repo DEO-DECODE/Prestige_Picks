@@ -3,7 +3,7 @@ import AdminMenu from "../../components/Layout/AdminMenu";
 import Layout from "./../../components/Layout/Layout";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import "../../styles/CardImage.css"
+import "../../styles/CardImage.css";
 const Products = () => {
   const [products, setProducts] = useState([]);
 
@@ -15,7 +15,8 @@ const Products = () => {
       console.log(response);
       if (response.ok) {
         setProducts(data.products);
-        console.log(products);
+        // console.log(products);
+        console.log(data.products);
       } else {
         toast.error(data.message);
       }
@@ -45,7 +46,9 @@ const Products = () => {
                 className="product-link"
               >
                 <div className="product-card" key={p._id}>
-                  <div className="badge">Hot</div>
+                  <div className="badge">
+                    {p.quantity >= 1 ? "In Stock.." : "Out of Stock.."}
+                  </div>
                   <div className="product-tumb">
                     <img src={p.photo} alt={p.name} />
                   </div>

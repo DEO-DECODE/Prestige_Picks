@@ -9,7 +9,7 @@ export default function PrivateRoute() {
 
   useEffect(() => {
     const authCheck = async () => {
-      console.log("Token before request:", auth.token);
+      // console.log("Token before request:", auth.token);
 
       try {
         const response = await fetch("/api/v1/auth/admin-auth", {
@@ -37,5 +37,5 @@ export default function PrivateRoute() {
     if (auth?.token) authCheck();
   }, [auth?.token]);
 
-  return ok ? <Outlet /> : <Spinner path="" />;
+  return ok ? <Outlet /> : <Spinner />;
 }

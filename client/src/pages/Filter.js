@@ -34,12 +34,6 @@ const Filter = () => {
       const data = await response.json();
 
       if (data) {
-        data.products.map((elem) => {
-          console.log(elem.name);
-          console.log("---");
-          console.log(elem.category);
-        });
-
         setProducts(data?.products);
         setAuth({ checked: [], radio: [] });
       }
@@ -57,7 +51,9 @@ const Filter = () => {
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
               <div className="product-card" key={p._id}>
-                <div className="badge">Hot</div>
+                <div className="badge">
+                  {p.quantity >= 1 ? "In Stock" : "Out Of Stock"}
+                </div>
                 <div className="product-tumb">
                   <img src={p.photo} alt={p.name} />
                 </div>

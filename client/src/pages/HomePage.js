@@ -51,7 +51,7 @@ const HomePage = () => {
   // get products
   const getAllProducts = async () => {
     try {
-      console.log("Sending Response for Page in getAllProducts : ", page);
+      // console.log("Sending Response for Page in getAllProducts : ", page);
       setLoading(true);
       const response = await fetch(`/api/v1/product/product-list/${page}`);
       const data = await response.json();
@@ -79,11 +79,11 @@ const HomePage = () => {
   const fetchMoreData = async () => {
     const nextPage = page + 1;
     setPage(nextPage);
-    console.log("Triggering Fetch more data ");
-    console.log("Current length: ", products.length);
+    // console.log("Triggering Fetch more data ");
+    // console.log("Current length: ", products.length);
     try {
       setLoading(true);
-      console.log("Sending Response for Page : ", nextPage);
+      // console.log("Sending Response for Page : ", nextPage);
       const response = await fetch(`/api/v1/product/product-list/${nextPage}`);
       const data = await response.json();
 
@@ -102,8 +102,8 @@ const HomePage = () => {
     if block is executed when you check a checkbox, and the else block is executed when you uncheck a checkbox. 
     */
     let all = [...auth.checked];
-    console.log("Boolean" + value);
-    console.log(auth.checked);
+    // console.log("Boolean" + value);
+    // console.log(auth.checked);
     if (value) {
       all.push(id);
     } else {
@@ -183,7 +183,9 @@ const HomePage = () => {
             <div className="d-flex flex-wrap">
               {products?.map((p) => (
                 <div className="product-card" key={p._id}>
-                  <div className="badge">Hot</div>
+                  <div className="badge">
+                    {p.quantity >= 1 ? "In Stock" : "Out Of Stock"}
+                  </div>
                   <div className="product-tumb">
                     <img src={p.photo} alt={p.name} />
                   </div>

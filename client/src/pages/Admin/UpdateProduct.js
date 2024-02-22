@@ -43,6 +43,7 @@ const UpdateProduct = () => {
       setQuantity(data.product.quantity);
       setShipping(data.product.shipping);
       setCategory(data.product.category._id);
+
       setProdImage(data.product.photo);
     } catch (error) {
       console.log(error);
@@ -51,7 +52,6 @@ const UpdateProduct = () => {
 
   useEffect(() => {
     getSingleProduct();
-    //eslint-disable-next-line
   }, []);
 
   //get all category

@@ -106,7 +106,7 @@ export const getSingleProductController = async (req, res) => {
     const product = await productModel
       .findOne({ slug: req.params.slug })
       .populate("category");
-    // console.log(product);
+    console.log(product);
     res.status(200).send({
       success: true,
       message: "Single Product Fetched",
@@ -116,7 +116,7 @@ export const getSingleProductController = async (req, res) => {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Eror while getitng single product",
+      message: "Error while getitng single product",
       error,
     });
   }
@@ -176,7 +176,8 @@ export const updateProductController = async (req, res) => {
       // If req.files or req.files.photo is null, proceed without uploading a new photo
       const { name, description, price, category, quantity, shipping } =
         req.body;
-
+      console.log("Inside Update Prod");
+      console.log(req.body);
       // Validations
       if (!name || !description || !price || !category || !quantity) {
         return res.status(400).send({ error: "All fields are required" });
@@ -213,7 +214,7 @@ export const productFiltersController = async (req, res) => {
     const { checked, radio } = req.body;
     let args = {};
     if (checked.length > 0) args.category = checked;
-    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+    if (radio.length > 0) args.price = { $gte: radio[0], $lte: radio[1] };
     console.log(args);
     const products = await productModel.find(args);
     res.status(200).send({
@@ -329,7 +330,9 @@ export const realtedProductController = async (req, res) => {
 export const productCategoryController = async (req, res) => {
   try {
     const category = await categoryModel.findOne({ slug: req.params.slug });
+    // console.log("Logging Category" +  category);
     const products = await productModel.find({ category }).populate("category");
+    console.log(products);
     /*
     At first we are fetching the category and then , we are using that category to find the products related to that category.
     */
