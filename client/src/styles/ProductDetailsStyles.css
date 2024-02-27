@@ -63,15 +63,17 @@
 
 .details div {
   color: #ffffff;
-  margin-top: 2rem;
-  font-size: 20px;
+  margin-top: 1rem;
+  font-size: 16px;
   font-weight: 500;
+  height: 300px;
+  /* border: 2px solid red; */
 }
 
 .details h2 {
   color: #ffffff;
   /* font-family: "muli"; */
-  margin-top: 2rem;
+  margin-top: 0.1rem;
   font-weight: 800;
   font-size: 29px;
 }
@@ -110,7 +112,7 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
-  background: linear-gradient(30deg, rgba(0, 0, 0, 0.7) 80%, rgba(251, 183, 44, 0.7) 20%), #252831 url("../carouselimages/carousel_img_4.jpg") no-repeat;
+  background: linear-gradient(30deg, rgba(0, 0, 0, 0.7) 90%, rgba(251, 183, 44, 0.4) 20%), #252831 url("../carouselimages/carousel_img_4.jpg") no-repeat;
   background-size: cover;
   height: 90vh;
   width: 800px;
@@ -126,7 +128,7 @@
   width: 48%;
   display: flex;
   align-items: center;
-  background-color:#fbb72c;
+  background-color: rgba(251, 183, 44, 0.4);
   /* margin-left: 93px; */
   border-radius: 0% 50% 50% 0%;
   position: relative;
@@ -145,9 +147,9 @@
 
 .right {
   content: "";
-  height: 70%;
+  height: 500px;
   width: 50%;
-  background-color: black;
+  /* background-color: black; */
   /* z-index: 3; */
   /* margin-left: 200px; */
   position: relative;
@@ -166,9 +168,10 @@
 .product-info button{
   position: absolute;
   width: 100%;
+  color: #ffffff;
   background-color: #fbb72c;
-  margin: 1rem auto;
-  bottom: 1rem;
+  /* margin: 1rem auto; */
+  /* bottom: 0.1rem; */
 }
 /* Text Styling */
 .product-name h1 {

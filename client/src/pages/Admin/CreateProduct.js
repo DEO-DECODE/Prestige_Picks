@@ -109,7 +109,7 @@ webkitRelativePath
           </div>
           <div className="col-md-9">
             <h1 className="logoText text-center">Create Product</h1>
-            <div className="m-1 w-75">
+            <div className="m-1">
               <Select
                 bordered={false}
                 placeholder="Select a category"

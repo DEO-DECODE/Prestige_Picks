@@ -111,8 +111,11 @@ const Profile = () => {
             <UserMenu />
           </div>
           <div className="col-md-8">
-            <div className="form-container" style={{ marginTop: "-40px" }}>
-              <form onSubmit={handleSubmit}>
+            <div className="form-container" style={{ marginTop: "-40px " }}>
+              <form
+                style={{ width: "60%" }}
+                onSubmit={handleSubmit}
+              >
                 <h4 className="title">USER PROFILE</h4>
 
                 <div className="mb-3">
@@ -206,7 +209,11 @@ const Profile = () => {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  style={{ width: "100%", backgroundColor: "#ffc107" }}
+                  className="btn btn-warning"
+                >
                   UPDATE
                 </button>
               </form>

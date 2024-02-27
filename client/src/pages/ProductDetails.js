@@ -64,12 +64,12 @@ const ProductDetails = () => {
         <div class="right" data-aos="fade-out">
           <div class="product-info">
             <div class="product-name">
-              <h1>{product.name}</h1>
+              <h1 className="logoText">{product.name}</h1>
             </div>
             <div class="details" data-aos="fade-in">
-              <h2>{product?.category?.name}</h2>
+              <h2 className="logoText">{product?.category?.name}</h2>
               <div>{product.description}</div>
-              <h4>
+              <h4 className="logoText">
                 Price :
                 {product?.price?.toLocaleString("en-US", {
                   style: "currency",

@@ -128,7 +128,7 @@ const HomePage = () => {
           className="filter-icon"
           onClick={() => setShowFilter((prevShowFilter) => !prevShowFilter)}
         >
-          <FontAwesomeIcon icon={faList} size="2x" />
+          <FontAwesomeIcon icon={faList} size="2x" style={{ color: "gray" }} />
         </div>
         <div className={`col-md-3 filters ${showFilter ? "show-filter" : ""}`}>
           <h4 className="text-center logoText">Filter By Category</h4>
@@ -176,7 +176,9 @@ const HomePage = () => {
             loader={<h4>Loading...</h4>}
             endMessage={
               <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
+                <b className="logoText" style={{ color: "gray" }}>
+                  Yay! You have seen it all
+                </b>
               </p>
             }
           >

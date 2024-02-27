@@ -19,8 +19,8 @@ const Search = () => {
     <Layout title={"Search results"}>
       <div className="col-md-12">
         <div className="text-center">
-          <h1 style={{ marginTop: "4rem" }}>Search Resuts</h1>
-          <h3>
+          <h1 className="logoText" style={{ marginTop: "4rem", color: "gray" }}>Search Resuts</h1>
+          <h3 className="logoText" style={{ color: "gray" }}>
             {values?.results.length < 1
               ? "No Products Found"
               : `Found ${values?.results.length} Items`}
