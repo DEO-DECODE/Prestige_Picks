@@ -37,7 +37,7 @@ const Products = () => {
           <AdminMenu />
         </div>
         <div className="col-md-9 ">
-          <h1 className="text-center logoText">All Products List</h1>
+          <h1 className="text-center logoText" style={{color:"gray"}}>All Products List</h1>
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
               <Link

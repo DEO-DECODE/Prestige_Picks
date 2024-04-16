@@ -44,10 +44,14 @@ const Filter = () => {
 
   return (
     <Layout title={"Showing Results Based on your Search"}>
-      <h1>All Products</h1>
       <div className="container-fluid row mt-3 home-page">
         <div className="col-md-12">
-          <h1 className="text-center">Showing Results Based On Your Filter</h1>
+        <h1 className="text-center" style={{marginTop:"4rem"}}>Showing Results Based On Your Filter</h1>
+        <h3 className="logoText text-center" style={{ color: "gray" }}>
+            {products?.length < 1
+              ? "No Products Found"
+              : `Found ${products?.length} Items`}
+          </h3>
           <div className="d-flex flex-wrap">
             {products?.map((p) => (
               <div className="product-card" key={p._id}>

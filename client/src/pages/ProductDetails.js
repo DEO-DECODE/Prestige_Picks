@@ -99,11 +99,11 @@ const ProductDetails = () => {
         style={{ width: "100%" }}
         data-aos="fade-right"
       >
-        <h1 className="logoText" style={{ textAlign: "center" }}>
+        <h1 className="logoText" style={{ textAlign: "center", color:"gray" }}>
           Showing Similar Products
         </h1>
         {relatedProducts.length < 1 && (
-          <p className="text-center">No Similar Products found</p>
+          <p style={{ textAlign: "center", color:"gray" }} className="text-center">No Similar Products found</p>
         )}
         <div className="d-flex flex-wrap" style={{ width: "100%" }}>
           {relatedProducts?.map((p) => (
@@ -153,29 +153,3 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
-/*
-<div class="card">
-      <div class="left">
-        <img
-          src="https://www.dropbox.com/s/e928cht0h5crcn4/shoe.png?raw=1"
-          alt="shoe"
-        />
-      </div>
-      <div class="right">
-        <div class="product-info">
-          <div class="product-name">
-            <h1>Airmax</h1>
-          </div>
-          <div class="details">
-            <h3>Winter Collection</h3>
-            <h2>Men Black Sneakers</h2>
-            <h4><span class="fa fa-dollar"></span>150</h4>
-            <h4 class="dis"><span class="fa fa-dollar"></span>200</h4>
-          </div>
-          <span class="foot"
-            ><i class="fa fa-shopping-cart"></i>Add TO Cart</span
-          >
-        </div>
-      </div>
-    </div>
-    */

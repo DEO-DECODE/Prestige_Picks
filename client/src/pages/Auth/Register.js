@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
 import { useAuth } from "../../context/auth";
 import OAuth from "../../components/OAuth";
-import { faGoogle } from '@fortawesome/free-brands-svg-icons';
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -18,7 +18,11 @@ const Register = () => {
   // form function
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
     try {
       const response = await fetch("/api/v1/auth/register", {
         method: "POST",
@@ -58,7 +62,9 @@ const Register = () => {
     <Layout title="Register - Ecommer App">
       <div className="form-container" style={{ minHeight: "90vh" }}>
         <form onSubmit={handleSubmit}>
-          <h4 className="title">REGISTER FORM</h4>
+          <h4 className="title" style={{ color: "gray" }}>
+            REGISTER
+          </h4>
 
           <div className="mb-3">
             <input

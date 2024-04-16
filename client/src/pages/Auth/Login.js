@@ -17,14 +17,16 @@ const Login = () => {
   // form function
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email address");
+      return;
+    }
     try {
       const response = await fetch("/api/v1/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          /*
-           When making a request, this header informs the server that the data being sent in the request body is formatted as JSON. 
-           */
         },
         body: JSON.stringify({
           email,
@@ -34,10 +36,6 @@ const Login = () => {
 
       const data = await response.json();
       console.log("LogIn action done");
-      // console.log(response);
-      /*
-      Response {type: 'basic', url: 'http://localhost:3000/api/v1/auth/login', redirected: false, status: 200, ok: true, …}
-      */
       if (response.ok && data.success) {
         toast.success(data.message);
         setAuth({
@@ -47,9 +45,6 @@ const Login = () => {
         });
         localStorage.setItem("auth", JSON.stringify(data));
         navigate(location.state || "/");
-        /*
-         the state set in Spinner.js is accessed in Login.js through the location.state property. This is possible because the state option in navigate allows you to pass data between routes during navigation.
-         */
       } else {
         toast.error(data.message);
       }
@@ -63,7 +58,9 @@ const Login = () => {
     <Layout title="Register - Ecommer App">
       <div className="form-container " style={{ minHeight: "90vh" }}>
         <form onSubmit={handleSubmit}>
-          <h4 className="title">LOGIN FORM</h4>
+          <h4 className="title logoText" style={{ color: "gray" }}>
+            LOGIN
+          </h4>
 
           <div className="mb-3">
             <input

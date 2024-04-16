@@ -1,24 +1,24 @@
 import mongoose from "mongoose";
 import crypto from "crypto";
+import validator from "validator";
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      // required: true,
-      // trim: true,
+      required: [true, "Please enter your Name!"],
     },
     email: {
       type: String,
-      required: true,
-      unique: true,
+      required: [true, "Please enter your Email!"],
+      validate: [validator.isEmail, "Please provide a valid Email!"],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Please provide a Password!"],
     },
     phone: {
       type: String,
-      // required: true,
+      required: [true, "Please enter your Phone Number!"],
     },
     address: {
       type: {},
@@ -37,10 +37,6 @@ const userSchema = new mongoose.Schema(
     resetPasswordExpire: Date,
   },
   { timestamps: true }
-  /*
- 
-In MongoDB, the timestamps: true option is used when defining a schema to automatically add createdAt and updatedAt fields to documents in a collection. These fields are then managed by MongoDB itself.
-*/
 );
 
 // Generating Password Reset Token

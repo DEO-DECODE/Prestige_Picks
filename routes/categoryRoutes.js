@@ -9,31 +9,21 @@ import {
 } from "./../controllers/categoryController.js";
 
 const router = express.Router();
-
-//routes
-// create category
 router.post(
   "/create-category",
   requireSignIn,
   isAdmin,
   createCategoryController
 );
-
-//update category
 router.put(
   "/update-category/:id",
   requireSignIn,
   isAdmin,
   updateCategoryController
 );
-
-//getALl category
 router.get("/get-category", categoryControlller);
-// Iske liye koii middleware nhi hai bcz.. need not to log in .
-//single category
-router.get("/single-category/:slug", singleCategoryController);
 
-//delete category
+router.get("/single-category/:slug", singleCategoryController);
 router.delete(
   "/delete-category/:id",
   requireSignIn,

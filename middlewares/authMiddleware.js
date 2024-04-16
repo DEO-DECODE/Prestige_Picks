@@ -10,11 +10,9 @@ export const requireSignIn = async (req, res, next) => {
     const bearerHeader = req.headers["authorization"];
 
     if (typeof bearerHeader !== "undefined") {
-      // Split the header value by space
       const bearer = bearerHeader.split(" ");
 
       if (bearer.length === 2) {
-        // Get the token from the split array
         token = bearer[1];
       }
     }
@@ -31,13 +29,9 @@ export const requireSignIn = async (req, res, next) => {
     next();
   } catch (error) {
     console.error(error);
-
-    // Check for specific JWT errors and handle them accordingly
     if (error.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "Unauthorized - Invalid token" });
     }
-
-    // Handle other errors (e.g., token expired)
     res.status(500).json({ error: "Internal Server Error" });
   }
 };

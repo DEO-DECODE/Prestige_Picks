@@ -108,7 +108,9 @@ webkitRelativePath
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <h1 className="logoText text-center">Create Product</h1>
+            <h1 className="logoText text-center" style={{ color: "gray" }}>
+              Create Product
+            </h1>
             <div className="m-1">
               <Select
                 bordered={false}

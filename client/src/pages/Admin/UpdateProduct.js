@@ -130,14 +130,14 @@ const UpdateProduct = () => {
 
   return (
     <Layout title={"Dashboard - Create Product"}>
-      <div className="container-fluid m-3 p-3">
-        <div className="row">
+      <div className="container-fluid m-3 p-3" >
+        <div className="row" style={{marginTop:"3rem"}}>
           <div className="col-md-3">
             <AdminMenu />
           </div>
           <div className="col-md-9">
-            <h1>Update Product</h1>
-            <div className="m-1 w-75">
+            <h1 className="logoText text-center" style={{color:"gray"}}>Update Product</h1>
+            <div className="m-1">
               <Select
                 bordered={false}
                 placeholder="Select a category"
@@ -242,12 +242,12 @@ const UpdateProduct = () => {
                 </Select>
               </div>
               <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleUpdate}>
+                <button className="btn btn-warning" onClick={handleUpdate}>
                   UPDATE PRODUCT
                 </button>
               </div>
               <div className="mb-3">
-                <button className="btn btn-danger" onClick={handleDelete}>
+                <button className="btn btn-dark" onClick={handleDelete}>
                   DELETE PRODUCT
                 </button>
               </div>

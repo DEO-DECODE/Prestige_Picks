@@ -14,14 +14,9 @@ const OAuth = () => {
   const handleGoogleClick = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      /*
-      The Provider object is an instance a configuration object that you can use
-      for triggering Authentication actions.
-      */
+      
       const authUser = getAuth(app);
-      /*
-      The Auth variable essentially holds an instance that you can use for various Authentication related Purpose.
-      */
+      
       const result = await signInWithPopup(authUser, provider);
       console.log(result.user);
       const response = await fetch("/api/v1/auth/google", {
@@ -45,9 +40,6 @@ const OAuth = () => {
         });
         localStorage.setItem("auth", JSON.stringify(data));
         navigate(location.state || "/");
-        /*
-         the state set in Spinner.js is accessed in Login.js through the location.state property. This is possible because the state option in navigate allows you to pass data between routes during navigation.
-         */
       } else {
         toast.error(data.message);
       }

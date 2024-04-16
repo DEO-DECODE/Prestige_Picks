@@ -1,5 +1,5 @@
 import userModel from "../models/userModel.js";
-import orderModel from "../models/orderModel.js";
+
 
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from "jsonwebtoken";
@@ -44,12 +44,6 @@ export const registerController = async (req, res) => {
       address,
       password: hashedPassword,
     }).save();
-
-    // res.status(201).send({
-    //   success: true,
-    //   message: "User Register Successfully",
-    //   user,
-    // });
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
@@ -77,7 +71,6 @@ export const registerController = async (req, res) => {
   }
 };
 
-//POST LOGIN
 export const loginController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -131,14 +124,10 @@ export const loginController = async (req, res) => {
   }
 };
 export const google = async (req, res) => {
-  // console.log(req.body);
   try {
-    // console.log("Before findOne query");
     const user = await userModel.findOne({
       email: req.body.email,
     });
-    // console.log("After findOne query");
-    // console.log("User found:", user);
     if (user) {
       const token = JWT.sign({ id: user._id }, process.env.JWT_SECRET, {
         expiresIn: "7d",
@@ -158,15 +147,12 @@ export const google = async (req, res) => {
         token,
       });
     } else {
-      // console.log("Else Part is executed at the moment");
       const generatedPassword =
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
       const hashedPassword = await hashPassword(generatedPassword);
-      //save
       console.log(req.body.name);
       console.log(req.body.email);
-      // console.log(hashPassword);
       console.log(req.body.photo);
       const user = await new userModel({
         name:
@@ -250,73 +236,12 @@ export const updateProfileController = async (req, res) => {
   }
 };
 
-//orders
-export const getOrdersController = async (req, res) => {
-  try {
-    const orders = await orderModel
-      .find({ buyer: req.user._id })
-      .populate("products", "-photo")
-      .populate("buyer", "name");
-    res.json(orders);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error WHile Geting Orders",
-      error,
-    });
-  }
-};
-//orders
-export const getAllOrdersController = async (req, res) => {
-  try {
-    const orders = await orderModel
-      .find({})
-      .populate("products", "-photo")
-      .populate("buyer", "name")
-      .sort({ createdAt: "-1" });
-    res.json(orders);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error WHile Geting Orders",
-      error,
-    });
-  }
-};
-
-//order status
-export const orderStatusController = async (req, res) => {
-  try {
-    const { orderId } = req.params;
-    const { status } = req.body;
-    const orders = await orderModel.findByIdAndUpdate(
-      orderId,
-      { status },
-      { new: true }
-    );
-    res.json(orders);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send({
-      success: false,
-      message: "Error While Updateing Order",
-      error,
-    });
-  }
-};
-
-/*
-Updating The Password Using Nodemailer
-*/
 
 // Forgot Password
 export const forgotPassword = async (req, res, next) => {
   const user = await userModel.findOne({ email: req.body.email });
 
   if (!user) {
-    // return next(new ErrorHander("User not found", 404));
     return res.status(404).send({
       success: false,
       message: "User Not Found",
@@ -328,7 +253,6 @@ export const forgotPassword = async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   const resetPasswordUrl = `${req.protocol}:localhost:3000/reset-password/${resetToken}`;
-  // req.host is going to return the Localhost
   const message = `Your password reset token is: ${resetPasswordUrl}\n\nIf you have not requested this email, please ignore it.`;
 
   try {
@@ -348,7 +272,6 @@ export const forgotPassword = async (req, res, next) => {
 
     await user.save({ validateBeforeSave: false });
 
-    // return next(new ErrorHander(error.message, 500));
     return res.status(500).send({
       success: false,
       message: error.message,
@@ -361,14 +284,12 @@ export const forgotPassword = async (req, res, next) => {
 export const resetPassword = async (req, res, next) => {
   try {
     const resetToken = req.params.token;
-    console.log("Received reset token:", resetToken);
+    // console.log("Received reset token:", resetToken);
 
     const resetPasswordToken = crypto
       .createHash("sha256")
       .update(resetToken)
       .digest("hex");
-    //  genearting a resetPasswordToken because, it was saved in hashed form.
-    console.log("Generated resetPasswordToken:", resetPasswordToken);
 
     const user = await userModel.findOne({
       resetPasswordToken,
@@ -379,12 +300,6 @@ export const resetPassword = async (req, res, next) => {
 
     if (!user) {
       console.log("User not found");
-      // return next(
-      //   new ErrorHander(
-      //     "Reset Password Token is invalid or has been expired",
-      //     400
-      //   )
-      // );
       return res.status(400).send({
         success: false,
         message: "Reset Password Token is invalid or has been expired",
@@ -393,7 +308,6 @@ export const resetPassword = async (req, res, next) => {
 
     if (req.body.password !== req.body.confirmPassword) {
       console.log("Password does not match");
-      // return next(new ErrorHander("Password does not Match", 400));
       return res.status(400).send({
         success: false,
         message: "Password does not Match",
@@ -405,7 +319,6 @@ export const resetPassword = async (req, res, next) => {
     user.resetPasswordExpire = undefined;
 
     await user.save();
-    // Reset Password krte time hame, hashing v krni hai ..
     console.log("Password reset successful");
     const token = await JWT.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
@@ -419,10 +332,10 @@ export const resetPassword = async (req, res, next) => {
         email: user.email,
         phone: user.phone,
         address: user.address,
+        avatar: user.avatar,
         role: user.role,
       },
       token,
-      // Av jo hm token bhej rhe hai, baad m use save v karana hoga.
     });
   } catch (error) {
     console.error("Error in resetPassword:", error);

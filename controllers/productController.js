@@ -1,14 +1,9 @@
 import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
-import orderModel from "../models/orderModel.js";
-
-import fs from "fs";
 import slugify from "slugify";
 import dotenv from "dotenv";
 import { v2 as cloudinary } from "cloudinary";
-/*
-The v2 module provides the main functionality for interacting with the Cloudinary service.
-*/
+
 //configure env
 dotenv.config({ path: "config.env" });
 cloudinary.config({
@@ -17,27 +12,12 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_api_secret,
 });
 
-//payment gateway
-// var gateway = new braintree.BraintreeGateway({
-//   environment: braintree.Environment.Sandbox,
-//   merchantId: process.env.BRAINTREE_MERCHANT_ID,
-//   publicKey: process.env.BRAINTREE_PUBLIC_KEY,
-//   privateKey: process.env.BRAINTREE_PRIVATE_KEY,
-// });
-
 export const createProductController = async (req, res) => {
   try {
     // console.log(req.body);
     console.log(req.files);
     const file = req.files.photo;
-    /*
-     it retrieves the uploaded file from the req.files object. The photo property corresponds to the field name used in the HTML form for the file upload.
-     */
     const result = await cloudinary.uploader.upload(file.tempFilePath);
-    /*
-    file.tempFilePath is the path to the temporary file on the server's filesystem. The express-fileupload middleware, with useTempFiles: true, saves the uploaded file as a temporary file.
-    */
-    // console.log(result);
     const { name, description, price, category, quantity, shipping } = req.body; //
 
     // Validations
@@ -82,9 +62,6 @@ export const getProductController = async (req, res) => {
       .find({})
       .populate("category")
       .sort({ createdAt: -1 });
-    /*
-     used to sort the retrieved documents based on the createdAt field in descending order
-    */
     res.status(200).send({
       success: true,
       counTotal: products.length,
@@ -142,13 +119,8 @@ export const deleteProductController = async (req, res) => {
 
 export const updateProductController = async (req, res) => {
   try {
-    // console.log(req.body);
-
     if (req.files && req.files.photo) {
       const file = req.files.photo;
-      // console.log(req.files);
-
-      // Retrieve the uploaded file from the req.files object
       const result = await cloudinary.uploader.upload(file.tempFilePath);
 
       // Validations
@@ -173,7 +145,6 @@ export const updateProductController = async (req, res) => {
         products,
       });
     } else {
-      // If req.files or req.files.photo is null, proceed without uploading a new photo
       const { name, description, price, category, quantity, shipping } =
         req.body;
       console.log("Inside Update Prod");
@@ -235,9 +206,6 @@ export const productFiltersController = async (req, res) => {
 export const productCountController = async (req, res) => {
   try {
     const total = await productModel.find({}).estimatedDocumentCount();
-    /*
-    estimatedDocumentCount(); to get the estimated count of documents in the collection represented by the productModel
-    */
     res.status(200).send({
       success: true,
       total,
@@ -308,9 +276,6 @@ export const realtedProductController = async (req, res) => {
         category: cid,
         _id: { $ne: pid },
       })
-      /*
-      $ne operator stands for "not equal." It is used to retrieve documents where a particular field is not equal to a specified value.
-      */
       .populate("category");
     res.status(200).send({
       success: true,
@@ -333,9 +298,6 @@ export const productCategoryController = async (req, res) => {
     // console.log("Logging Category" +  category);
     const products = await productModel.find({ category }).populate("category");
     console.log(products);
-    /*
-    At first we are fetching the category and then , we are using that category to find the products related to that category.
-    */
 
     res.status(200).send({
       success: true,
@@ -351,53 +313,3 @@ export const productCategoryController = async (req, res) => {
     });
   }
 };
-
-//payment gateway api
-//token
-// export const braintreeTokenController = async (req, res) => {
-//   try {
-//     gateway.clientToken.generate({}, function (err, response) {
-//       if (err) {
-//         res.status(500).send(err);
-//       } else {
-//         res.send(response);
-//       }
-//     });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-//payment
-// export const brainTreePaymentController = async (req, res) => {
-//   try {
-//     const { nonce, cart } = req.body;
-//     let total = 0;
-//     cart.map((i) => {
-//       total += i.price;
-//     });
-//     let newTransaction = gateway.transaction.sale(
-//       {
-//         amount: total,
-//         paymentMethodNonce: nonce,
-//         options: {
-//           submitForSettlement: true,
-//         },
-//       },
-//       function (error, result) {
-//         if (result) {
-//           const order = new orderModel({
-//             products: cart,
-//             payment: result,
-//             buyer: req.user._id,
-//           }).save();
-//           res.json({ ok: true });
-//         } else {
-//           res.status(500).send(error);
-//         }
-//       }
-//     );
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };

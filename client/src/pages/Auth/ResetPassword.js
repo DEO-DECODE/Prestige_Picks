@@ -57,7 +57,9 @@ const ResetPassword = () => {
     <Layout title={"Reset Password - Prestige Picks"}>
       <div className="form-container">
         <form onSubmit={handleSubmit}>
-          <h4 className="title">RESET PASSWORD</h4>
+          <h4 className="title" style={{ color: "gray" }}>
+            RESET PASSWORD
+          </h4>
 
           <div className="mb-3">
             <input

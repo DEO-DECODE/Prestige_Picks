@@ -116,7 +116,7 @@ const Profile = () => {
                 style={{ width: "60%" }}
                 onSubmit={handleSubmit}
               >
-                <h4 className="title">USER PROFILE</h4>
+                <h4 className="title logoText" style={{color:"gray"}}>USER PROFILE</h4>
 
                 <div className="mb-3">
                   <input
@@ -211,7 +211,7 @@ const Profile = () => {
 
                 <button
                   type="submit"
-                  style={{ width: "100%", backgroundColor: "#ffc107" }}
+                  style={{ width: "100%" }}
                   className="btn btn-warning"
                 >
                   UPDATE
